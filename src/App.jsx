@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./app.css";
-import { Frase } from "./components/Frase";
-import SayMyName from "./components/SayMyName";
-import Pessoa from "./components/Pessoa";
+import "./App.css";
+import "./index.css"
+import styles from "./components/Frase.module.css"
+import Frase from "./components/Frase";
 
-function App() {
-  const nome = "João";
-
+const App = () => {
   return (
-    <div>
+    <div className="App">
       <Frase />
-      <SayMyName nome="Maria" />
-      <SayMyName nome={nome} />
-      <Pessoa
-        nome="Paulo"
-        idade="28"
-        profissao="Programador"
-        foto="https://placehold.co/150"
-      />
     </div>
   );
-}
+};
 
 export default App;
