@@ -1,7 +1,15 @@
 .fraseContainer {
-  background-color: #333;
-  border: 1px solid #111;
+  background-color: #000;
+  border: 1px solid #333;
   size: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  height: 30px;
+  width: 50%;
+  
 }
 
 .fraseContent {
