@@ -1,14 +1,13 @@
 import Item from "./Item";
-import styles from "./List.module.css";
 
 function List() {
   return (
     <>
       <h1>Minha Lista</h1>
       <ul>
-        <Item marca="Ferrari" />
-        <Item marca="Fiat" />
-        <Item marca="Wolkswagen" />
+        <Item marca="Ferrari" anoLancamento={1985} />
+        <Item marca="Ford" />
+        <Item anoLancamento={1985} />
       </ul>
     </>
   );

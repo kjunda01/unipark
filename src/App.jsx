@@ -4,14 +4,12 @@ import "./index.css"
 import styles from "./components/Frase.module.css"
 import Frase from "./components/Frase";
 import List from "./components/List";
-import Table from "./components/Table";
 
 const App = () => {
   return (
     <div className="App">
       <Frase />
-      <List />
-      <Table/>
+      <List/>
     </div>
   );
 };
