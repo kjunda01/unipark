@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { Form } from "react-router-dom";
 import "./App.css";
-import "./index.css"
-import styles from "./components/Frase.module.css"
-import Frase from "./components/Frase";
-import List from "./components/List";
+import Evento from "./components/Evento";
+import Formulario from "./components/form/Formulario";
 
 const App = () => {
   return (
     <div className="App">
-      <Frase />
-      <List/>
+      <Evento numero={1} />
+      <Evento numero={2} />
+      <Formulario />
     </div>
   );
 };
