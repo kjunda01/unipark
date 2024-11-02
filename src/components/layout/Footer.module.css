@@ -1,17 +1,49 @@
+:root {
+  --footer-bg-color: #262626;
+  --footer-icon-color: #e4e0da;
+}
 
-.socialList {
+.rodape {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--footer-bg-color);
+  color: var(--footer-icon-color);
+  padding: 1rem;
+  width: 100%;
+}
+
+.imagemRodape {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.mensagemRodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.listaIcones {
+  display: flex;
   list-style: none;
-}
-
-.socialList li {
-  margin: 0 1em;
-}
-
-.socialList svg {
+  gap: 1rem;
+  padding: 0;
   font-size: 2em;
+  color: var(--footer-icon-color);
   cursor: pointer;
-  color: red;
+}
+
+.mensagem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  padding: 0.5rem;
+}
+
+.mensagem p {
+  margin: 0;
 }
