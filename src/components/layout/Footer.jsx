@@ -18,7 +18,7 @@ function Footer() {
   return (
     <footer className={styles.rodape}>
       <div className={styles.imagemRodape}>
-        <p>Imagem</p>
+        <img src="src/assets/img/logo_uni.png" alt="Logo unilavras" />
       </div>
       <div className={styles.mensagemRodape}>
         <ul className={styles.listaIcones}>
