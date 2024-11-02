@@ -1,14 +1,11 @@
-import { Form } from "react-router-dom";
 import "./App.css";
-import Evento from "./components/Evento";
-import Formulario from "./components/form/Formulario";
+import Condicional from "./components/Condicional";
 
 const App = () => {
   return (
     <div className="App">
-      <Evento numero={1} />
-
-      <Formulario />
+      <h1>Renderização condicional</h1>
+      <Condicional />
     </div>
   );
 };
