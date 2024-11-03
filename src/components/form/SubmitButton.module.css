@@ -1,0 +1,18 @@
+.submitButton {
+  text-align: center;  
+}
+
+
+.submitButton button {
+  background-color: var(--azul-escuro-unilavras);
+  padding: 0.7em 1.2em;
+  text-decoration: none;
+  transition: 0.5s;
+  cursor: pointer;
+  border: none;
+  color: var(--azul-claro-unilavras);
+}
+
+.submitButton button:hover {
+  color: var(--amarelo-background);
+}

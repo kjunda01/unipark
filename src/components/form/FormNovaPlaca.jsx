@@ -1,7 +1,10 @@
 import { useState } from "react";
 import styles from "./FormNovaPlaca.module.css";
+import Input from "./Input";
+import Select from "./Select";
+import SubmitButton from "./SubmitButton";
 
-function FormNovaPlaca() {
+function FormNovaPlaca({btnText}) {
   // name = nome do tributo para pegar
   // setName = o que será alterado
   //const [name, setName] = useState();
@@ -9,56 +12,62 @@ function FormNovaPlaca() {
 
   return (
     <form className={styles.formulario}>
-      <div>
-        <label>Placa</label>
-        <input type="text" placeholder="Informe a placa do veículo" />
-      </div>
+      <Input
+        type="text"
+        text="Placa"
+        name="name"
+        placeholder="Informe a placa do veículo"
+      />
 
-      <div>
-        <label>Marca</label>
-        <input type="text" placeholder="Informe a marca do veículo" />
-      </div>
+      <Input
+        type="text"
+        text="Marca"
+        name="name"
+        placeholder="Informe a marca do veículo"
+      />
 
-      <div>
-        <label>Modelo</label>
-        <input type="text" placeholder="Informe o modelo do veículo" />
-      </div>
+      <Input
+        type="text"
+        text="Modelo"
+        name="name"
+        placeholder="Informe o modelo do veículo"
+      />
 
-      <div>
-        <label>Cor</label>
-        <input type="text" placeholder="Informe a cor do veículo" />
-      </div>
+      <Input
+        type="text"
+        text="Cor"
+        name="name"
+        placeholder="Informe a cor do veículo"
+      />
 
-      <div>
-        <label>Ano</label>
-        <input type="text" placeholder="Informe o ano do veículo" />
-      </div>
+      <Input
+        type="number"
+        text="Ano"
+        name="name"
+        placeholder="Informe o ano do veículo"
+      />
 
-      <div>
-        <label>Nome do colaborador (proprietário)</label>
-        <input
-          type="text"
-          placeholder="Informe o nome do colaborador (proprietário)"
-        />
-      </div>
+      <Input
+        type="text"
+        text="Nome do colaborador (proprietário)"
+        name="name"
+        placeholder="Informe o nome do colaborador (proprietário)"
+      />
 
-      <div>
-        <label>Matrícula do colaborador (proprietário)</label>
-        <input type="text" placeholder="" />
-      </div>
+      <Input
+        type="text"
+        text="Matrícula do colaborador (proprietário)"
+        name="name"
+        placeholder="Informe a matrícula do colaborador (proprietário)"
+      />
 
-      <div>
-        <label>Status (permitida ou não a entrada no estacionamento)</label>
-        <select>
-          <option value="Sim">Sim</option>
-          <option value="Não">Não</option>
-        </select>
-      </div>
+      <Select
+        name="Status"
+        text="Status (permitida ou não a entrada no estacionamento)"
+      />
 
-      <div>
-        <input type="submit" value="Realizar cadastro" />
-      </div>
-      
+      <SubmitButton btnText={btnText}/>
+
     </form>
   );
 }

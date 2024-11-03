@@ -9,7 +9,7 @@
 }
 .tituloPrincipal {
   align-items: center;
-  padding: 1em;
+  padding: auto;
   text-decoration: none;
   color: var(--azul-escuro-unilavras);
 }

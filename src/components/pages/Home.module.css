@@ -10,15 +10,18 @@
 .homeContainer h1 {
   font-size: 2.5em;
   margin-bottom: 1.5em;
+  text-align: center;
 }
 
 .homeContainer h1 span {
   color: var(--azul-escuro-unilavras);
-  padding: 0 0.2em;
+  padding: auto;
   background-color: var(--amarelo-background);
+  
 }
 
 .homeContainer p {
   margin-bottom: 1.5em;
   color: var(--azul-escuro-unilavras);
+  text-align: center;
 }

@@ -3,18 +3,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-content: center;
-  text-align: center;
-  width: 100%;
+  margin: 0 auto;
+  padding: 1em;
+  width: 80%;
 }
 
 .formulario {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 100%;
+  margin: 2em 0;
 }
 
-.formulario div {
+.boxBtn{
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  
 }
+

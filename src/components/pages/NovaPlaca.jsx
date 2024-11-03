@@ -7,7 +7,7 @@ function NovaPlaca() {
     <div className={styles.novaPlacaContainer}>
       <h1>Adicionar veículo</h1>
       <p>Adicione o veículo desejado preenchendo o formulário:</p>
-      <FormNovaPlaca />
+      <FormNovaPlaca btnText="Adicionar placa"/>
     </div>
   );
 }
