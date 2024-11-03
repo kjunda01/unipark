@@ -19,6 +19,9 @@ function Navbar() {
           <li className={styles.item}>
             <Link to="/novaplaca">Nova Placa</Link>
           </li>
+          <li className={styles.item}>
+            <Link to="/aovivo">Tempo Real</Link>
+          </li>
         </ul>
       </Container>
     </nav>

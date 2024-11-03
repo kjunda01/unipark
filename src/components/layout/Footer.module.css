@@ -9,10 +9,10 @@
 .rodape {
   font-family: "Helvetica";
   justify-content: center;
-  background: #febb35;
+  background: #febb33;
   color: var(--azul-escuro-unilavras);
   width: 100%;
-  gap: 1em;
+  gap: 0.5em;
 }
 
 .imagemRodape {
@@ -23,13 +23,13 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 0.5em;
   
 }
 
 .listaIcones {
-  padding: 0.8em;
-  gap: 15px;
+  padding: 0.5em;
+  gap: 0.5em;
   flex-wrap: wrap;
   list-style: none;
   font-size: 2em;

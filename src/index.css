@@ -1,6 +1,7 @@
 :root {
   --azul-claro-unilavras: rgb(0, 157, 224);
   --azul-escuro-unilavras: rgb(2, 29, 52);
+  --amarelo-background: rgb(254, 187, 51)
 }
 
 * {
@@ -13,5 +14,5 @@
 html,
 body,
 #root {
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(230, 230, 230);
 }

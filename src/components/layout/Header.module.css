@@ -5,11 +5,11 @@
 
 .cabecalho {
   justify-content: space-between;
-  background: #febb35;
+  background: var(--amarelo-background);
 }
 .tituloPrincipal {
   align-items: center;
-  padding: 2em;
+  padding: 1em;
   text-decoration: none;
   color: var(--azul-escuro-unilavras);
 }
