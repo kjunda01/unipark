@@ -1,10 +1,9 @@
 function NovaPlaca() {
   return (
-    <>
-      <div>
-        <p>1</p>
-      </div>
-    </>
+    <div>
+      <h1>NovaPlaca</h1>
+      <p>Esta é a minha NovaPlaca</p>
+    </div>
   );
 }
 

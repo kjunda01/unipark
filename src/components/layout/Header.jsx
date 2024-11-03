@@ -4,9 +4,14 @@ import styles from "./Header.module.css";
 function Header() {
   return (
     <header className={styles.cabecalho}>
-      
-      <h1 className={styles.tituloPrincipal}>UNIPARK</h1>
-
+      <a
+        className={styles.tituloPrincipal}
+        href="https://unilavras.edu.br"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <h1>UNIPARK</h1>
+      </a>
       <Navbar />
     </header>
   );

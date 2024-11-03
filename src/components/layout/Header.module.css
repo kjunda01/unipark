@@ -1,14 +1,15 @@
+.cabecalho,
+.tituloPrincipal {
+  display: flex;
+}
 
-/*
-.cabecalho{
-    display: flex;
-    justify-content: space-between;
-    background: #fefefe;
-    
+.cabecalho {
+  justify-content: space-between;
+  background: #febb35;
 }
-.cabecalho{
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
+.tituloPrincipal {
+  align-items: center;
+  padding: 2em;
+  text-decoration: none;
+  color: var(--azul-escuro-unilavras);
 }
-*/
