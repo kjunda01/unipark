@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://670436afab8a8f892733500d.mockapi.io/placa";
+const API_URL = "https://6727abed270bd0b9755344ee.mockapi.io/api/Placas";
 
 export const getPlacas = async () => {
   return axios.get(API_URL);
@@ -17,3 +17,4 @@ export const updatePlaca = async (id, data) => {
 export const deletePlaca = async (id) => {
   return axios.delete(`${API_URL}/${id}`);
 };
+

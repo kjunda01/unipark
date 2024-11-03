@@ -1,8 +1,10 @@
+import styles from "./PlacasCadastradas.module.css";
+import TabelaListaPlacas from "../form/TabelaListaPlacas";
+
 function PlacasCadastradas() {
   return (
     <div>
-      <h1>PlacasCadastradas</h1>
-      <p>Esta é a minha PlacasCadastradas</p>
+      <TabelaListaPlacas />
     </div>
   );
 }

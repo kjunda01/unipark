@@ -1,30 +1,40 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./FormNovaPlaca.module.css";
-import Input from "./Input";
+ 
 import Select from "./Select";
 import SubmitButton from "./SubmitButton";
+import Input from "./Input";
 
-function FormNovaPlaca({btnText}) {
+function FormNovaPlaca({ btnText }) {
   // name = nome do tributo para pegar
   // setName = o que será alterado
   //const [name, setName] = useState();
   //const [password, setPassword] = useState();
 
+  // URL MOCK
+  //https://6727abed270bd0b9755344ee.mockapi.io/api/Placas
+  //https://unipark-a9b95-default-rtdb.firebaseio.com/marcas.json
+
+  const[marcas, setMarcas] = useState([]);
+
+  useEffect(() => {
+    fetch("http://192.168.1.199:5000/marcas", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setMarcas(data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <form className={styles.formulario}>
-      <Input
-        type="text"
-        text="Placa"
-        name="name"
-        placeholder="Informe a placa do veículo"
-      />
 
-      <Input
-        type="text"
-        text="Marca"
-        name="name"
-        placeholder="Informe a marca do veículo"
-      />
+      <Select name="marcas_id" text="Marcas" options={marcas}/>
 
       <Input
         type="text"
@@ -66,8 +76,7 @@ function FormNovaPlaca({btnText}) {
         text="Status (permitida ou não a entrada no estacionamento)"
       />
 
-      <SubmitButton btnText={btnText}/>
-
+      <SubmitButton btnText={btnText} />
     </form>
   );
 }
