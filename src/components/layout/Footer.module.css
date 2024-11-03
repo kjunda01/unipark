@@ -1,3 +1,4 @@
+
 :root {
   --footer-bg-color: #262626;
   --footer-icon-color: #e4e0da;
@@ -6,26 +7,24 @@
 }
 
 .rodape {
-  font-family: 'Helvetica';
+  font-family: "Helvetica";
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #333;
+  justify-content: space-around;
+  background: #555;
   color: var(--azul-claro-unilavras);
-  padding: 1rem;
+  height: 150px;
 }
 
 .imagemRodape {
   display: flex;
   align-items: center;
-  margin-right: 1rem;
 }
 
 .mensagemRodape {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0;
 }
 
 .listaIcones {
@@ -42,10 +41,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-   
+
   padding: 0.5rem;
 }
 
 .mensagem p {
   margin: 0;
+}
+
+.imagem {
+  width: 100%;
+  height: auto;
 }

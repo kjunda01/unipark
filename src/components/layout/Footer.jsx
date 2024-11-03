@@ -4,21 +4,22 @@ import MensagemFooter from "./MensagemFooter";
 
 function Footer() {
   function paginaFacebook() {
-    location.replace("https://www.facebook.com/unilavras");
+    window.open("https://www.facebook.com/unilavras", "_blank");
   }
   function paginaInstagram() {
-    location.replace("https://www.instagram.com/unilavras");
+    window.open("https://www.instagram.com/unilavras", "_blank");
   }
   function paginaLinkedin() {
-    location.replace(
+    window.open(
       "https://br.linkedin.com/school/unilavras-centro-universitario/",
+      "_blank",
     );
   }
 
   return (
     <footer className={styles.rodape}>
-      <div className={styles.imagemRodape}>
-        <img src="src/assets/img/logo_uni.png" alt="Logo unilavras" />
+      <div className={styles.magemRodape}>
+        <img src="src/img/logo_unilavras_rodape.png" alt="Logo unilavras" className={styles.imagem}/>
       </div>
       <div className={styles.mensagemRodape}>
         <ul className={styles.listaIcones}>

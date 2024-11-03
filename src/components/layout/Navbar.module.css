@@ -1,10 +1,13 @@
 .list {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: right;
+  gap: 20px;
+  padding: 20px;
   background: #9999;
 }
 .item {
   margin: 0;
   padding: 0;
   list-style: none;
+  background: red;
 }

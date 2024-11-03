@@ -14,6 +14,9 @@ function Navbar() {
         <li className={styles.item}>
           <Link to="/contato">Contato</Link>
         </li>
+        <li className={styles.item}>
+          <Link to="/novaplaca">Nova Placa</Link>
+        </li>
       </ul>
     </nav>
   );
