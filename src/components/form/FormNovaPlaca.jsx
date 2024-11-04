@@ -18,7 +18,7 @@ function FormNovaPlaca({ btnText }) {
   const[marcas, setMarcas] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.1.199:5000/marcas", {
+    fetch("https://unipark-a9b95-default-rtdb.firebaseio.com/marcas.json", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -1,3 +1,4 @@
+import Teste from "../form/Teste";
 import LinkButton from "../layout/LinkButton";
 import styles from "./Home.module.css";
 
@@ -9,6 +10,9 @@ function Home() {
       </h1>
       <p>Para visualizar em tempo real a câmera clique abaixo</p>
       <LinkButton to="/aovivo" texto="Mostrar câmera" />
+
+
+      <Teste/>
     </section>
   );
 }
