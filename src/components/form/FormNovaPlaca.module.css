@@ -19,3 +19,18 @@
   
 }
 
+
+.boxBtn button {
+  text-align: center;  
+  background-color: var(--azul-escuro-unilavras);
+  padding: 0.7em 1.2em;
+  text-decoration: none;
+  transition: 0.5s;
+  cursor: pointer;
+  border: none;
+  color: var(--azul-claro-unilavras);
+}
+
+.boxBtn button:hover {
+  color: var(--amarelo-background);
+}

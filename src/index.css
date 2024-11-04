@@ -1,7 +1,9 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
 :root {
   --azul-claro-unilavras: rgb(0, 157, 224);
   --azul-escuro-unilavras: rgb(2, 29, 52);
-  --amarelo-background: rgb(254, 187, 51)
+  --amarelo-background: rgb(254, 187, 51);
 }
 
 * {
