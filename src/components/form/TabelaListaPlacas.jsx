@@ -44,9 +44,9 @@ function TabelaListaPlacas() {
             <td>{placa.ano}</td>
             <td>{placa.cor}</td>
             <td>{placa.marca}</td>
-            <td>{placa.matriculaproprietario}</td>
+            <td>{placa.matricula}</td>
             <td>{placa.modelo}</td>
-            <td>{placa.nomeproprietario}</td>
+            <td>{placa.proprietario}</td>
             <td>{placa.placa}</td>
             <td>{placa.status}</td>
           </tr>

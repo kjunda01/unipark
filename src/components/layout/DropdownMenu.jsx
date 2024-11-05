@@ -1,19 +1,28 @@
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 
-function DropdownMenu() {
+function MeuDropdown() {
   return (
     <Dropdown>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
-        Placas
+        Veículos
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item href="consulta">Listar veículos</Dropdown.Item>
-        <Dropdown.Item href="novaplaca">Cadastrar veículos</Dropdown.Item>
-        
+        <Dropdown.Item as={Link} to="/consulta">
+          Consultar veículos
+        </Dropdown.Item>
+
+        <Dropdown.Item as={Link} to="/adicionarVeiculo">
+          Cadastrar veículos
+        </Dropdown.Item>
+
+        <Dropdown.Item as={Link} to="/aovivo">
+          AO VIVO
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
 }
 
-export default DropdownMenu;
+export default MeuDropdown;

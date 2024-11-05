@@ -1,4 +1,3 @@
-import styles from "./PlacasCadastradas.module.css";
 import TabelaListaPlacas from "../form/TabelaListaPlacas";
 
 function PlacasCadastradas() {

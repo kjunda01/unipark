@@ -1,11 +1,11 @@
-.novaPlacaContainer {
+.adicionarVeiculoContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
   padding: 1em;
-  width: 80%;
+  width: 100%;
 }
 
 .formulario {

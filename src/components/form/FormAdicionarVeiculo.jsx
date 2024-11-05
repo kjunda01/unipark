@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "./FormNovaPlaca.module.css";
+import styles from "./FormAdicionarVeiculo.module.css";
 import axios from "axios";
 
 import Input from "./Input";
 
-function FormNovaPlaca() {
+function FormAdicionarVeiculo() {
   // name = nome do tributo para pegar
   // setName = o que será alterado
   //const [name, setName] = useState();
@@ -17,51 +17,46 @@ function FormNovaPlaca() {
   const [ano, setAno] = useState(); // Valor padrão
   const [cor, setCor] = useState("");
   const [marca, setMarca] = useState("");
-  const [matriculaProprietario, setMatriculaProprietario] = useState("");
+  const [matricula, setMatricula] = useState("");
   const [modelo, setModelo] = useState("");
-  const [nomedoproprietario, setNomedoproprietario] = useState("");
+  const [proprietario, setProprietario] = useState("");
   const [placa, setPlaca] = useState("");
-  const [status, setStatus] = useState("Permitido"); // Valor padrão
+  const [status, setStatus] = useState("Permitido");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
-      ano,
-      cor,
-      marca,
-      matriculaProprietario,
-      modelo,
-      nomedoproprietario,
       placa,
+      marca,
+      modelo,
+      cor,
+      ano,
+      proprietario,
+      matricula,
       status,
     };
 
     try {
-      const response = await axios.post("http://localhost:5000/placas", data);
-      console.log("Registro adicionado:", response.data);
+      const response = await axios.post(
+        "http://192.168.1.199:5000/placas",
+        data,
+      );
+      alert("Registro adicionado:", response.data);
     } catch (error) {
-      console.log("Erro ao adicionar registro:", error);
+      alert("Erro ao adicionar registro:", error);
     }
   };
 
   return (
-    <div className={styles.novaPlacaContainer}>
+    <div className={styles.adicionarVeiculoContainer}>
       <form onSubmit={handleSubmit} className={styles.formulario}>
         <Input
-          type="number"
-          text="Ano"
-          name="ano"
-          value={ano}
-          onChange={(e) => setAno(e.target.value)}
-          required
-        />
-        <Input
           type="text"
-          text="Cor"
-          name="cor"
-          value={cor}
-          onChange={(e) => setCor(e.target.value)}
+          text="Placa"
+          name="placa"
+          value={placa}
+          onChange={(e) => setPlaca(e.target.value)}
           required
         />
         <Input
@@ -74,14 +69,6 @@ function FormNovaPlaca() {
         />
         <Input
           type="text"
-          text="Matrícula do Proprietário"
-          name="matriculaProprietario"
-          value={matriculaProprietario}
-          onChange={(e) => setMatriculaProprietario(e.target.value)}
-          required
-        />
-        <Input
-          type="text"
           text="Modelo"
           name="modelo"
           value={modelo}
@@ -90,20 +77,38 @@ function FormNovaPlaca() {
         />
         <Input
           type="text"
-          text="Nome do Proprietário"
-          name="nomedoproprietario"
-          value={nomedoproprietario}
-          onChange={(e) => setNomedoproprietario(e.target.value)}
+          text="Cor"
+          name="cor"
+          value={cor}
+          onChange={(e) => setCor(e.target.value)}
+          required
+        />
+        <Input
+          type="number"
+          text="Ano"
+          name="ano"
+          value={ano}
+          onChange={(e) => setAno(e.target.value)}
           required
         />
         <Input
           type="text"
-          text="Placa"
-          name="placa"
-          value={placa}
-          onChange={(e) => setPlaca(e.target.value)}
+          text="Nome do Proprietário"
+          name="nomedoproprietario"
+          value={proprietario}
+          onChange={(e) => setProprietario(e.target.value)}
           required
         />
+
+        <Input
+          type="text"
+          text="Matrícula do Proprietário"
+          name="matricula"
+          value={matricula}
+          onChange={(e) => setMatricula(e.target.value)}
+          required
+        />
+
         <Input
           type="text"
           text="Status"
@@ -120,7 +125,7 @@ function FormNovaPlaca() {
   );
 }
 
-export default FormNovaPlaca;
+export default FormAdicionarVeiculo;
 
 // {
 //   "ano":2024,

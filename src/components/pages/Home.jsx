@@ -1,5 +1,6 @@
-import Teste from "../form/Teste";
+import InputComMarcas from "../layout/InputComMarcas";
 import LinkButton from "../layout/LinkButton";
+import VeiculoComponent from "../layout/VeiculoComponent";
 import styles from "./Home.module.css";
 
 function Home() {
@@ -12,7 +13,7 @@ function Home() {
       <LinkButton to="/aovivo" texto="Mostrar câmera" />
 
 
-      <Teste/>
+      <InputComMarcas/>
     </section>
   );
 }

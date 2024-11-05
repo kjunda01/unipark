@@ -1,17 +1,13 @@
 import Navbar from "./Navbar";
 import styles from "./Header.module.css";
+import LinkButton from "./LinkButton";
+import { FaHome } from "react-icons/fa";
 
 function Header() {
+  function Home() {}
   return (
     <header className={styles.cabecalho}>
-      <a
-        className={styles.tituloPrincipal}
-        href="https://unilavras.edu.br"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <h1>UNIPARK</h1>
-      </a>
+      <LinkButton to="/" texto={<FaHome className={styles.home} />} />;
       <Navbar />
     </header>
   );

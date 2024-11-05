@@ -1,26 +1,10 @@
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  background: var(--azul-escuro-unilavras);
-  padding: 0.5em;
-  
+padding: 1em;
+display: flex;
+flex-direction: row;
+align-content: center;
+align-items: center;
+align-self: center;
+
 }
 
-.list {
-  display: flex;
-  list-style: none;
-  align-items: center;
-}
-
-.item {
-margin: 0.5em;
-}
-
-.item a{
-  color: #FFF;
-  text-decoration: none;
-}
-
-.item a:hover{
-  color: var(--azul-claro-unilavras);
-}
