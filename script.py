@@ -1,13 +1,12 @@
 import requests
 import json
 import os
-import time
 
 def carregar_dados_existentes(arquivo):
     if os.path.exists(arquivo):
         with open(arquivo, 'r', encoding='utf-8') as f:
             return json.load(f)
-    return {"marcas": []}
+    return {"tipos_veiculos": {}}
 
 def salvar_dados(arquivo, dados):
     with open(arquivo, 'w', encoding='utf-8') as f:
@@ -24,7 +23,9 @@ def obter_marcas(tipo_veiculo, token=None):
     response = requests.get(url, headers=headers)
     
     if response.status_code != 200:
-        print(f"Erro ao obter marcas: {response.status_code}")
+        if response.status_code == 429:
+            print(f"Erro {response.status_code} - Limite de requests atingido!")
+        print(f"Erro ao obter marcas: Status Code {response.status_code}")
         return []
     
     return response.json()
@@ -78,17 +79,22 @@ def obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token=Non
     return response.json()
 
 def main():
-    tipo_veiculo = "carros"  # Altere para "motos" ou "caminhoes" conforme necessário
+    tipo_veiculo = "motos"  # Altere para "motos" ou "caminhoes" conforme necessário
     arquivo_resultado = 'resultado_fipe_completo.json'
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NmM1YTY5NC1iODA4LTRhMzktOTllZC0wZjgyYjczNDI3ZDciLCJlbWFpbCI6InNpbnZhbGp1bmlvcmxtc0BnbWFpbC5jb20iLCJpYXQiOjE3MzA3NjgzMzJ9.5OTeQkvvWinEAaZwuOiE7wvX4souucNBsT2qnf91U0I"  # Substitua pelo seu token real
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMDJlZDQxOS00MGU5LTRkYTYtOGI2Mi1hZDU1OWEyODllMWYiLCJlbWFpbCI6InBpeW94NzU2NzVAZ2lhbmVzLmNvbSIsImlhdCI6MTczMDgyNTE2MH0.KVxC2D0kl2roVNKEMxs3uklrzoHOIJCtT7KGCiQdUVA"  # Substitua pelo seu token real
 
     # Carregar dados existentes
     dados_existentes = carregar_dados_existentes(arquivo_resultado)
-    marcas_existentes = {marca['marca']['codigo']: marca for marca in dados_existentes['marcas']}
-    print(f"Dados já existentes carregados: {len(marcas_existentes)} marcas.")
 
-    # Montar o JSON
-    resultado = dados_existentes
+    # Inicializa 'tipos_veiculos' caso não exista
+    if 'tipos_veiculos' not in dados_existentes:
+        dados_existentes['tipos_veiculos'] = {}
+
+    if tipo_veiculo not in dados_existentes['tipos_veiculos']:
+        dados_existentes['tipos_veiculos'][tipo_veiculo] = []
+
+    marcas_existentes = {marca['marca']['codigo']: marca for marca in dados_existentes['tipos_veiculos'][tipo_veiculo]}
+    print(f"Inicializando o processamento para o tipo de veículo: {tipo_veiculo}")
 
     # Obter todas as marcas
     marcas = obter_marcas(tipo_veiculo, token)
@@ -110,6 +116,7 @@ def main():
         # Verificar se a marca já foi processada
         if codigo_marca in marcas_existentes:
             print(f"  Marca {marca['nome']} (Código: {codigo_marca}) já processada.")
+            continue
 
         modelos = obter_modelos(tipo_veiculo, codigo_marca, token)
 
@@ -120,7 +127,7 @@ def main():
         }
 
         if 'modelos' in modelos and modelos['modelos']:
-            print(f"  Marca: {marca['nome']} (Código: {codigo_marca})")
+            print(f"  Processando marca: {marca['nome']} (Código: {codigo_marca})")
             # Iterar por cada modelo
             for modelo in modelos['modelos']:
                 if isinstance(modelo, dict):
@@ -137,51 +144,71 @@ def main():
                     "anos": []
                 }
 
-            # Se anos estiver vazio, tente obter novamente
-            tentativas = 0
-            while (not anos or isinstance(anos, list) and not anos) and tentativas < 3:
-                print(f"    Nenhum ano disponível para o modelo {modelo['nome']}. Tentando novamente...")
-                time.sleep(2)  # Esperar um pouco antes de tentar novamente
-                anos = obter_anos(tipo_veiculo, codigo_marca, codigo_modelo, token)
-                tentativas += 1
+                # Se anos estiver vazio, tente obter novamente
+                tentativas = 0
+                while (not anos or isinstance(anos, list) and not anos) and tentativas < 3:
+                    print(f"    Nenhum ano disponível para o modelo {modelo['nome']}. Tentando novamente...")
+                    anos = obter_anos(tipo_veiculo, codigo_marca, codigo_modelo, token)
+                    tentativas += 1
 
-            # Verifique se a resposta é uma lista e contém anos
-            if isinstance(anos, dict) and 'anos' in anos and anos['anos']:
-                print(f"    Modelo: {modelo['nome']} (Código: {codigo_modelo})")
-                # Iterar por cada ano
-                for ano in anos['anos']:
-                    if isinstance(ano, dict):
-                        ano_codigo = ano['codigo']
-                    else:
-                        print(f"Formato inesperado de ano: {ano}")
-                        continue
+                # Verifique se a resposta é uma lista e contém anos
+                if isinstance(anos, list):
+                    print(f"    Modelo: {modelo['nome']} (Código: {codigo_modelo})")
+                    # Iterar por cada ano
+                    for ano in anos:
+                        if isinstance(ano, dict):
+                            ano_codigo = ano['codigo']
+                        else:
+                            print(f"Formato inesperado de ano: {ano}")
+                            continue
 
-                    valor = obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token)
+                        valor = obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token)
 
-                    # Adicionar ano e valor ao JSON
-                    anos_do_modelo["anos"].append({
-                        "ano": ano,
-                        "valor": valor
-                    })
-            else:
-                print(f"    Após tentativas, nenhum ano disponível para o modelo {modelo['nome']}.")
+                        # Adicionar ano e valor ao JSON
+                        anos_do_modelo["anos"].append({
+                            "ano": ano,
+                            "valor": valor
+                        })
 
+                        # Salvar dados após processar cada ano
+                        salvar_dados(arquivo_resultado, dados_existentes)
+                        print(f"      Dados salvos para o ano: {ano['codigo']} do modelo: {modelo['nome']}")
 
+                else:
+                    print(f"    Após tentativas, nenhum ano disponível para o modelo {modelo['nome']}.")
+
+                # Adicionar anos_do_modelo aos modelos_da_marca
                 modelos_da_marca["modelos"].append(anos_do_modelo)
 
+                # Salvar dados após processar cada modelo
+                salvar_dados(arquivo_resultado, dados_existentes)
+                print(f"    Dados salvos para o modelo: {modelo['nome']}")
+        
         else:
             print(f"  A marca {marca['nome']} não possui modelos disponíveis.")
 
-        resultado["marcas"].append(modelos_da_marca)
+        # Adicionar modelos_da_marca ao resultado final para a marca processada
+        dados_existentes['tipos_veiculos'][tipo_veiculo].append(modelos_da_marca)
 
-        # Salvar dados a cada iteração
-        salvar_dados(arquivo_resultado, resultado)
+        # Salvar dados após processar cada marca
+        salvar_dados(arquivo_resultado, dados_existentes)
         print(f"Dados salvos para a marca: {marca['nome']}")
-
-        # Delay para evitar limites de requisição
-        time.sleep(1)
 
     print("\nColeta de dados finalizada. Resultados salvos em 'resultado_fipe_completo.json'.")
 
 if __name__ == "__main__":
     main()
+
+
+
+#piyox75675@gianes.com
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMDJlZDQxOS00MGU5LTRkYTYtOGI2Mi1hZDU1OWEyODllMWYiLCJlbWFpbCI6InBpeW94NzU2NzVAZ2lhbmVzLmNvbSIsImlhdCI6MTczMDgyNTE2MH0.KVxC2D0kl2roVNKEMxs3uklrzoHOIJCtT7KGCiQdUVA
+
+#kifex19416@cironex.com
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmI0NWEyNy1jNzE3LTQwYmUtOTY5Yy1iYmFjZTMwOWE0YzgiLCJlbWFpbCI6ImtpZmV4MTk0MTZAY2lyb25leC5jb20iLCJpYXQiOjE3MzA4MjU4OTh9.23uudaDssomggflvsVFcWPZBKrMH9rO8LJb0SKe1OAQ
+
+#naxidav328@edectus.com
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjYxNWM0NS0yZWJlLTQ2ZDEtODZiZC04MzBlZTU1ZGJhNTAiLCJlbWFpbCI6Im5heGlkYXYzMjhAZWRlY3R1cy5jb20iLCJpYXQiOjE3MzA4Mjk4MzB9.pQN-JA_M46hptGwxRUM7RaCYcSxmGG3BHQnBrTVRxbQ
+
+#nasan40841@cironex.com
+#
