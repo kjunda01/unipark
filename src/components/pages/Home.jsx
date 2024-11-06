@@ -1,7 +1,7 @@
 import LinkButton from "../layout/LinkButton";
 
 import styles from "./Home.module.css";
-import ListaMarcas from "./Marcas";
+import SelectMarcas from "./SelectMarcas";
 
 function Home() {
   return (
@@ -12,8 +12,7 @@ function Home() {
       <p>Para visualizar em tempo real a câmera clique abaixo</p>
       <LinkButton to="/aovivo" texto="Mostrar câmera" />
 
-
-      <ListaMarcas/>
+      <SelectMarcas />
     </section>
   );
 }
