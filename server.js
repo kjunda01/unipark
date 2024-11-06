@@ -29,23 +29,6 @@ app.get("/marcas", (req, res) => {
   res.json(data.marcas);
 });
 
-// Rota para obter os carros
-app.get("/marcas/carros", (req, res) => {
-  const data = readData();
-  res.json(data.marcas.carros);
-});
-
-// Rota para obter as motos
-app.get("/marcas/motos", (req, res) => {
-  const data = readData();
-  res.json(data.marcas.motos);
-});
-
-// Rota para obter os caminhoes
-app.get("/marcas/caminhoes", (req, res) => {
-  const data = readData();
-  res.json(data.marcas.caminhoes);
-});
 
 // Iniciar o servidor
 app.listen(PORT, () => {

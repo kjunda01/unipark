@@ -1,13 +1,12 @@
-import FormAdicionarVeiculo from "../form/FormAdicionarVeiculo";
-import styles from "../form/FormAdicionarVeiculo.module.css";
+import LinkButton from "../layout/LinkButton";
+import styles from "./AdicionarVeiculo.module.css";
 
+import Container from "../layout/Container";
 function AdicionarVeiculo() {
   return (
-    <div className={styles.adicionarVeiculoContainer}>
-      <h1>Adicionar veículo</h1>
-      <p>Adicione o veículo desejado preenchendo o formulário:</p>
-      <FormAdicionarVeiculo btnText="Adicionar placa" />
-    </div>
+    <Container>
+      <LinkButton texto="Olá" to="/" />
+    </Container>
   );
 }
 

@@ -9,7 +9,7 @@ function MeuDropdown() {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item as={Link} to="/consulta">
+        <Dropdown.Item as={Link} to="/veiculos">
           Consultar veículos
         </Dropdown.Item>
 

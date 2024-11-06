@@ -1,16 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import styles from "./TabelaListaPlacas.module.css";
+import styles from "./TabelaVeiculos.module.css";
 
-function TabelaListaPlacas() {
+function TabelaVeiculos() {
   const [placas, setPlacas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.199:5000/placas")
+      .get("https://unipark-a9b95-default-rtdb.firebaseio.com/veiculos.json")
       .then((response) => {
-        setPlacas(response.data);
+        const data = response.data
+          ? Object.entries(response.data).map(([placa, dados]) => ({
+              placa,
+              ...dados,
+            }))
+          : [];
+        setPlacas(data);
         setLoading(false);
       })
       .catch((erro) => {
@@ -22,32 +28,31 @@ function TabelaListaPlacas() {
   if (loading) {
     return <div>Carregando....</div>;
   }
+
   return (
     <table className={styles.tabela}>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Placa</th>
           <th>Ano</th>
           <th>Cor</th>
           <th>Marca</th>
-          <th>Matrícula Proprietário</th>
+          <th>Matrícula</th>
           <th>Modelo</th>
-          <th>Nome Proprietário</th>
-          <th>Placa</th>
+          <th>Proprietário</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
         {placas.map((placa) => (
-          <tr key={placa.id}>
-            <td>{placa.id}</td>
+          <tr key={placa.placa}>
+            <td>{placa.placa}</td>
             <td>{placa.ano}</td>
             <td>{placa.cor}</td>
             <td>{placa.marca}</td>
             <td>{placa.matricula}</td>
             <td>{placa.modelo}</td>
             <td>{placa.proprietario}</td>
-            <td>{placa.placa}</td>
             <td>{placa.status}</td>
           </tr>
         ))}
@@ -55,4 +60,5 @@ function TabelaListaPlacas() {
     </table>
   );
 }
-export default TabelaListaPlacas;
+
+export default TabelaVeiculos;

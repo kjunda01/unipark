@@ -8,7 +8,7 @@ const SelectMarcas = () => {
   useEffect(() => {
     const fetchMarcas = async () => {
       try {
-        const response = await axios.get("http://192.168.1.199:5000/marcas");
+        const response = await axios.get("https://unipark-a9b95-default-rtdb.firebaseio.com/marcas.json");
 
         // Utiliza um Set para eliminar duplicatas com base no nome
         const marcasUnicas = Array.from(

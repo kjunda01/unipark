@@ -6,9 +6,9 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 
 import Home from "./components/pages/Home";
-import PlacasCadastradas from "./components/pages/PlacasCadastradas";
 import AdicionarVeiculo from "./components/pages/AdicionarVeiculo";
 import TempoReal from "./components/pages/TempoReal";
+import Veiculos from "./components/pages/Veiculos";
 
 
 function App() {
@@ -18,8 +18,8 @@ function App() {
       <Container customClass="minHeight">
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/consulta" element={<PlacasCadastradas />} />
-          <Route exact path="/novaplaca" element={<AdicionarVeiculo />} />
+          <Route exact path="/veiculos" element={<Veiculos />} />
+          <Route exact path="/adicionarveiculo" element={<AdicionarVeiculo />} />
           <Route exact path="/aovivo" element={<TempoReal />} />
 
         </Routes>

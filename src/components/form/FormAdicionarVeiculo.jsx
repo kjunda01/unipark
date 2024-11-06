@@ -1,20 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./FormAdicionarVeiculo.module.css";
 import axios from "axios";
-
 import Input from "./Input";
 
 function FormAdicionarVeiculo() {
-  // name = nome do tributo para pegar
-  // setName = o que será alterado
-  //const [name, setName] = useState();
-  //const [password, setPassword] = useState();
-
-  // URL MOCK
-  //https://6727abed270bd0b9755344ee.mockapi.io/api/Placas
-  //https://unipark-a9b95-default-rtdb.firebaseio.com/marcas.json
-
-  const [ano, setAno] = useState(); // Valor padrão
+  const [ano, setAno] = useState("");
   const [cor, setCor] = useState("");
   const [marca, setMarca] = useState("");
   const [matricula, setMatricula] = useState("");
@@ -26,25 +16,29 @@ function FormAdicionarVeiculo() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Estrutura dos dados conforme o formato necessário
     const data = {
-      placa,
-      marca,
-      modelo,
-      cor,
-      ano,
-      proprietario,
-      matricula,
-      status,
+      [placa]: {
+        marca,
+        modelo,
+        cor,
+        ano,
+        proprietario,
+        matricula,
+        status,
+      },
     };
 
     try {
-      const response = await axios.post(
-        "http://192.168.1.199:5000/placas",
+      const response = await axios.patch(
+        "https://unipark-a9b95-default-rtdb.firebaseio.com/veiculos.json",
         data,
       );
-      alert("Registro adicionado:", response.data);
+      alert(
+        "Registro adicionado com sucesso: " + JSON.stringify(response.data),
+      );
     } catch (error) {
-      alert("Erro ao adicionar registro:", error);
+      alert("Erro ao adicionar registro: " + error.message);
     }
   };
 
@@ -99,7 +93,6 @@ function FormAdicionarVeiculo() {
           onChange={(e) => setProprietario(e.target.value)}
           required
         />
-
         <Input
           type="text"
           text="Matrícula do Proprietário"
@@ -108,17 +101,16 @@ function FormAdicionarVeiculo() {
           onChange={(e) => setMatricula(e.target.value)}
           required
         />
-
         <Input
           type="text"
-          text="Status"
+          text="Status (Permitido ou Proibido)"
           name="status"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           required
         />
         <div className={styles.boxBtn}>
-          <button type="submit">Adicionar Placa</button>
+          <button type="submit">Cadastrar Veículo</button>
         </div>
       </form>
     </div>
@@ -126,14 +118,3 @@ function FormAdicionarVeiculo() {
 }
 
 export default FormAdicionarVeiculo;
-
-// {
-//   "ano":2024,
-//   "cor":"Verde",
-//   "marca":"Fiat",
-//   "matriculaProprietario":"000 asd000",
-//   "modelo":"Palasdasdio",
-//   "nomedoproprietario":"Josasdasdaé",
-//   "placa":"HCZ4807",
-//   "status":"Permitido"
-// }
