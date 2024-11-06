@@ -1,13 +1,16 @@
-fetch("https://unipark-a9b95-default-rtdb.firebaseio.com/Placas.json")
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    console.log("Dados recebidos:", data);
-  })
-  .catch((error) => {
-    console.error("Houve um problema com a requisição GET:", error);
-  });
+import axios from "axios";
+
+axios
+  .get("http://localhost:5000/marcas")  
+  .then((response) => response.data)  
+  .then((data) => data)
+  .then((carros) => {
+
+    // ordem alfabética
+    const carrosOrdenados = carros.sort((a, b) => a.nome.localeCompare(b.nome));
+    
+    // Imprime os nomes dos carros ordenados
+    carrosOrdenados.forEach((carro) => console.log(carro.nome.toUpperCase()));
+
+  })  
+  .catch((error) => console.error("Erro ao buscar dados:", error));  

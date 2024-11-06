@@ -1,8 +1,7 @@
-import InputComMarcas from "../layout/InputComMarcas";
 import LinkButton from "../layout/LinkButton";
 
 import styles from "./Home.module.css";
-import VeiculoSelect from "./VeiculoSelect";
+import ListaMarcas from "./Marcas";
 
 function Home() {
   return (
@@ -14,7 +13,7 @@ function Home() {
       <LinkButton to="/aovivo" texto="Mostrar câmera" />
 
 
-      <VeiculoSelect/>
+      <ListaMarcas/>
     </section>
   );
 }
