@@ -79,9 +79,9 @@ def obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token=Non
     return response.json()
 
 def main():
-    tipo_veiculo = "motos"  # Altere para "motos" ou "caminhoes" conforme necessário
+    tipo_veiculo = "caminhoes"  # Altere para "motos" ou "caminhoes" conforme necessário
     arquivo_resultado = 'resultado_fipe_completo.json'
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMDJlZDQxOS00MGU5LTRkYTYtOGI2Mi1hZDU1OWEyODllMWYiLCJlbWFpbCI6InBpeW94NzU2NzVAZ2lhbmVzLmNvbSIsImlhdCI6MTczMDgyNTE2MH0.KVxC2D0kl2roVNKEMxs3uklrzoHOIJCtT7KGCiQdUVA"  # Substitua pelo seu token real
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZTIyZmNkNC1iYTNjLTQ1YjEtODBiNC1jYjhmNWYzYzc0ZjIiLCJlbWFpbCI6Im1hdGlqaTM1NDlAaW5pa2FsZS5jb20iLCJpYXQiOjE3MzA4NTIyNDN9.j_UDPxC37z0WobggOPnIE5R04egGy6xaEkutR3VfiuU"  # Substitua pelo seu token real
 
     # Carregar dados existentes
     dados_existentes = carregar_dados_existentes(arquivo_resultado)
@@ -212,3 +212,6 @@ if __name__ == "__main__":
 
 #nasan40841@cironex.com
 #
+
+#matiji3549@inikale.com
+#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZTIyZmNkNC1iYTNjLTQ1YjEtODBiNC1jYjhmNWYzYzc0ZjIiLCJlbWFpbCI6Im1hdGlqaTM1NDlAaW5pa2FsZS5jb20iLCJpYXQiOjE3MzA4NTIyNDN9.j_UDPxC37z0WobggOPnIE5R04egGy6xaEkutR3VfiuU
