@@ -1,217 +1,167 @@
-import requests
+# #piyox75675@gianes.com
+# #eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMDJlZDQxOS00MGU5LTRkYTYtOGI2Mi1hZDU1OWEyODllMWYiLCJlbWFpbCI6InBpeW94NzU2NzVAZ2lhbmVzLmNvbSIsImlhdCI6MTczMDgyNTE2MH0.KVxC2D0kl2roVNKEMxs3uklrzoHOIJCtT7KGCiQdUVA
+
+# #kifex19416@cironex.com
+# #eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmI0NWEyNy1jNzE3LTQwYmUtOTY5Yy1iYmFjZTMwOWE0YzgiLCJlbWFpbCI6ImtpZmV4MTk0MTZAY2lyb25leC5jb20iLCJpYXQiOjE3MzA4MjU4OTh9.23uudaDssomggflvsVFcWPZBKrMH9rO8LJb0SKe1OAQ
+
+# #naxidav328@edectus.com
+# #eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjYxNWM0NS0yZWJlLTQ2ZDEtODZiZC04MzBlZTU1ZGJhNTAiLCJlbWFpbCI6Im5heGlkYXYzMjhAZWRlY3R1cy5jb20iLCJpYXQiOjE3MzA4Mjk4MzB9.pQN-JA_M46hptGwxRUM7RaCYcSxmGG3BHQnBrTVRxbQ
+
+# #nasan40841@cironex.com
+# #
+
+# #matiji3549@inikale.com
+# #eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZTIyZmNkNC1iYTNjLTQ1YjEtODBiNC1jYjhmNWYzYzc0ZjIiLCJlbWFpbCI6Im1hdGlqaTM1NDlAaW5pa2FsZS5jb20iLCJpYXQiOjE3MzA4NTIyNDN9.j_UDPxC37z0WobggOPnIE5R04egGy6xaEkutR3VfiuU
+
+
 import json
+import requests
 import os
 
-def carregar_dados_existentes(arquivo):
-    if os.path.exists(arquivo):
-        with open(arquivo, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {"tipos_veiculos": {}}
-
-def salvar_dados(arquivo, dados):
-    with open(arquivo, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=4)
-
-def obter_marcas(tipo_veiculo, token=None):
-    url = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas"
-    headers = {}
-    
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-
-    print(f"Obtendo marcas para {tipo_veiculo}...")
-    response = requests.get(url, headers=headers)
-    
-    if response.status_code != 200:
-        if response.status_code == 429:
-            print(f"Erro {response.status_code} - Limite de requests atingido!")
-        print(f"Erro ao obter marcas: Status Code {response.status_code}")
-        return []
-    
-    return response.json()
-
-def obter_modelos(tipo_veiculo, codigo_marca, token=None):
-    url = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos"
-    headers = {}
-
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-
-    print(f"Obtendo modelos para a marca código {codigo_marca}...")
-    response = requests.get(url, headers=headers)
-
-    if response.status_code != 200:
-        print(f"Erro ao obter modelos: {response.status_code}")
-        return {}
-    
-    return response.json()
-
-def obter_anos(tipo_veiculo, codigo_marca, codigo_modelo, token=None):
-    url = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos"
-    headers = {}
-
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-
-    print(f"Obtendo anos para o modelo código {codigo_modelo} da marca código {codigo_marca}...")
-    response = requests.get(url, headers=headers)
-
-    if response.status_code != 200:
-        print(f"Erro ao obter anos: {response.status_code}")
-        return {}
-    
-    return response.json()
-
-def obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token=None):
-    url = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos/{ano_codigo}"
-    headers = {}
-
-    if token:
-        headers['Authorization'] = f'Bearer {token}'
-
-    print(f"Obtendo valor para o modelo código {codigo_modelo}, ano código {ano_codigo}...")
-    response = requests.get(url, headers=headers)
-
-    if response.status_code != 200:
-        print(f"Erro ao obter valor: {response.status_code}")
-        return {}
-    
-    return response.json()
-
-def main():
-    tipo_veiculo = "caminhoes"  # Altere para "motos" ou "caminhoes" conforme necessário
-    arquivo_resultado = 'resultado_fipe_completo.json'
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZTIyZmNkNC1iYTNjLTQ1YjEtODBiNC1jYjhmNWYzYzc0ZjIiLCJlbWFpbCI6Im1hdGlqaTM1NDlAaW5pa2FsZS5jb20iLCJpYXQiOjE3MzA4NTIyNDN9.j_UDPxC37z0WobggOPnIE5R04egGy6xaEkutR3VfiuU"  # Substitua pelo seu token real
-
-    # Carregar dados existentes
-    dados_existentes = carregar_dados_existentes(arquivo_resultado)
-
-    # Inicializa 'tipos_veiculos' caso não exista
-    if 'tipos_veiculos' not in dados_existentes:
-        dados_existentes['tipos_veiculos'] = {}
-
-    if tipo_veiculo not in dados_existentes['tipos_veiculos']:
-        dados_existentes['tipos_veiculos'][tipo_veiculo] = []
-
-    marcas_existentes = {marca['marca']['codigo']: marca for marca in dados_existentes['tipos_veiculos'][tipo_veiculo]}
-    print(f"Inicializando o processamento para o tipo de veículo: {tipo_veiculo}")
-
-    # Obter todas as marcas
-    marcas = obter_marcas(tipo_veiculo, token)
-    
-    if isinstance(marcas, list):
-        print(f"Total de marcas obtidas: {len(marcas)}\n")
+# Função para salvar dados incrementalmente no arquivo JSON
+def save_partial_data(data, cache_file='fipe_data.json'):
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as file:
+            existing_data = json.load(file)
     else:
-        print(f"Formato inesperado ao obter marcas: {marcas}")
-        return
+        existing_data = {"marcas": []}
 
-    # Iterar por cada marca
-    for marca in marcas:
-        if isinstance(marca, dict):
-            codigo_marca = marca['codigo']
-        else:
-            print(f"Formato inesperado de marca: {marca}")
-            continue
+    # Atualiza o cache com os novos dados
+    marca_existente = next((marca for marca in existing_data["marcas"] if marca["codigo"] == data["codigo"]), None)
+    if marca_existente:
+        existing_data["marcas"].remove(marca_existente)
 
-        # Verificar se a marca já foi processada
-        if codigo_marca in marcas_existentes:
-            print(f"  Marca {marca['nome']} (Código: {codigo_marca}) já processada.")
-            continue
+    existing_data["marcas"].append(data)
+    
+    with open(cache_file, 'w') as file:
+        json.dump(existing_data, file, indent=4)
 
-        modelos = obter_modelos(tipo_veiculo, codigo_marca, token)
+# Carrega cache previamente salvo
+def load_cache(cache_file='fipe_data.json'):
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as file:
+            return json.load(file)
+    return {"marcas": []}
 
-        # Armazenar modelos da marca
-        modelos_da_marca = {
-            "marca": marca,
-            "modelos": []
-        }
+# Função para verificar se uma marca já está no cache
+def is_cached(codigo_marca, codigo_modelo=None, ano_codigo=None, cache=None):
+    if cache is None:
+        cache = load_cache()
+    
+    for marca in cache["marcas"]:
+        if marca["codigo"] == codigo_marca:
+            if codigo_modelo is None:
+                return True  # Marca já processada
+            for modelo in marca["modelos"]:
+                if modelo["codigo"] == codigo_modelo:
+                    if ano_codigo is None:
+                        return True  # Modelo já processado
+                    if any(ano["codigo"] == ano_codigo for ano in modelo["anos"]):
+                        return True  # Ano já processado
+    return False
 
-        if 'modelos' in modelos and modelos['modelos']:
-            print(f"  Processando marca: {marca['nome']} (Código: {codigo_marca})")
-            # Iterar por cada modelo
-            for modelo in modelos['modelos']:
-                if isinstance(modelo, dict):
-                    codigo_modelo = modelo['codigo']
-                else:
-                    print(f"Formato inesperado de modelo: {modelo}")
-                    continue
+# Função principal para captura com verificação de cache
+def fetch_and_cache_all_data(tipo_veiculo, api_key, cache_file='fipe_data.json'):
+    cache = load_cache(cache_file)
 
-                anos = obter_anos(tipo_veiculo, codigo_marca, codigo_modelo, token)
+    headers = {
+        'Authorization': f'Bearer {api_key}',  # Inclui a chave de API no cabeçalho
+    }
+    
+    # Passo 1: Consulta marcas
+    url_brands = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas"
+    response = requests.get(url_brands, headers=headers)
 
-                # Armazenar anos do modelo
-                anos_do_modelo = {
-                    "modelo": modelo,
-                    "anos": []
-                }
+    if response.status_code == 200:
+        brands_data = response.json()
+        num_brands = len(brands_data)
+        print(f"Total de códigos de marcas encontrados: {num_brands}")
 
-                # Se anos estiver vazio, tente obter novamente
-                tentativas = 0
-                while (not anos or isinstance(anos, list) and not anos) and tentativas < 3:
-                    print(f"    Nenhum ano disponível para o modelo {modelo['nome']}. Tentando novamente...")
-                    anos = obter_anos(tipo_veiculo, codigo_marca, codigo_modelo, token)
-                    tentativas += 1
+        # Itera sobre as marcas e busca modelos e detalhes
+        for idx, brand in enumerate(brands_data):
+            codigo_marca = brand['codigo']
+            if is_cached(codigo_marca, cache=cache):
+                print(f"Capturando código {codigo_marca}.. ({idx + 1}/{num_brands}) - Dados do cache.")
+                continue
 
-                # Verifique se a resposta é uma lista e contém anos
-                if isinstance(anos, list):
-                    print(f"    Modelo: {modelo['nome']} (Código: {codigo_modelo})")
-                    # Iterar por cada ano
-                    for ano in anos:
-                        if isinstance(ano, dict):
-                            ano_codigo = ano['codigo']
-                        else:
-                            print(f"Formato inesperado de ano: {ano}")
-                            continue
+            print(f"Capturando código {codigo_marca}.. ({idx + 1}/{num_brands}) - Consultando API.")
+            brand_info = {
+                "codigo": codigo_marca,
+                "nome": brand['nome'],
+                "modelos": []
+            }
 
-                        valor = obter_valor(tipo_veiculo, codigo_marca, codigo_modelo, ano_codigo, token)
+            url_models = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos"
+            response_models = requests.get(url_models, headers=headers)
+            
+            if response_models.status_code == 200:
+                models_data = response_models.json().get('modelos', [])
+                if not models_data:  # Verifica se a resposta é vazia
+                    print(f"  Não foram encontrados modelos para a marca {brand['nome']} ou limite de requisições atingido. Ignorando marca.")
+                    continue  # Ignora a marca com dados vazios
 
-                        # Adicionar ano e valor ao JSON
-                        anos_do_modelo["anos"].append({
-                            "ano": ano,
-                            "valor": valor
-                        })
+                num_models = len(models_data)
+                print(f"  Total de modelos encontrados para a marca {brand['nome']}: {num_models}")
 
-                        # Salvar dados após processar cada ano
-                        salvar_dados(arquivo_resultado, dados_existentes)
-                        print(f"      Dados salvos para o ano: {ano['codigo']} do modelo: {modelo['nome']}")
+                # Itera sobre os modelos para obter anos e detalhes
+                for model_idx, model in enumerate(models_data):
+                    codigo_modelo = model['codigo']
+                    if is_cached(codigo_marca, codigo_modelo, cache=cache):
+                        print(f"    Modelo {model['nome']} ({model_idx + 1}/{num_models}) - Dados do cache.")
+                        continue
 
-                else:
-                    print(f"    Após tentativas, nenhum ano disponível para o modelo {modelo['nome']}.")
+                    print(f"    Modelo {model['nome']} ({model_idx + 1}/{num_models}) - Consultando API.")
+                    model_info = {
+                        "codigo": codigo_modelo,
+                        "nome": model['nome'],
+                        "anos": []
+                    }
 
-                # Adicionar anos_do_modelo aos modelos_da_marca
-                modelos_da_marca["modelos"].append(anos_do_modelo)
+                    url_years = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos"
+                    response_years = requests.get(url_years, headers=headers)
+                    
+                    if response_years.status_code == 200:
+                        years_data = response_years.json()
+                        if not years_data:  # Verifica se a resposta é vazia
+                            print(f"    Não foram encontrados anos para o modelo {model['nome']} ou limite de requisições atingido. Ignorando modelo.")
+                            continue  # Ignora o modelo com dados vazios
 
-                # Salvar dados após processar cada modelo
-                salvar_dados(arquivo_resultado, dados_existentes)
-                print(f"    Dados salvos para o modelo: {modelo['nome']}")
-        
-        else:
-            print(f"  A marca {marca['nome']} não possui modelos disponíveis.")
+                        num_years = len(years_data)
+                        print(f"      Modelo {model['nome']} ({model_idx + 1}/{num_models}): Total de anos: {num_years}")
 
-        # Adicionar modelos_da_marca ao resultado final para a marca processada
-        dados_existentes['tipos_veiculos'][tipo_veiculo].append(modelos_da_marca)
+                        # Itera sobre os anos para obter detalhes finais
+                        for year_idx, year in enumerate(years_data):
+                            ano_codigo = year['codigo']
+                            if is_cached(codigo_marca, codigo_modelo, ano_codigo, cache=cache):
+                                print(f"        Ano {year['nome']} ({year_idx + 1}/{num_years}) - Dados do cache.")
+                                continue
 
-        # Salvar dados após processar cada marca
-        salvar_dados(arquivo_resultado, dados_existentes)
-        print(f"Dados salvos para a marca: {marca['nome']}")
+                            print(f"        Ano {year['nome']} ({year_idx + 1}/{num_years}) - Consultando API.")
+                            year_info = {"codigo": ano_codigo, "nome": year['nome']}
 
-    print("\nColeta de dados finalizada. Resultados salvos em 'resultado_fipe_completo.json'.")
+                            url_details = f"https://parallelum.com.br/fipe/api/v1/{tipo_veiculo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos/{ano_codigo}"
+                            response_details = requests.get(url_details, headers=headers)
+                            
+                            if response_details.status_code == 200:
+                                details_data = response_details.json()
+                                year_info['detalhes'] = details_data
+                                print(f"          Ano {year['nome']} capturado com sucesso da API.")
 
-if __name__ == "__main__":
-    main()
+                            model_info["anos"].append(year_info)
+                    
+                    brand_info["modelos"].append(model_info)
+            
+            # Salva a marca no JSON após captura completa
+            if brand_info["modelos"]:  # Só salva se houver dados de modelos
+                save_partial_data(brand_info, cache_file)
+                cache["marcas"].append(brand_info)  # Atualiza o cache local
+                print(f"Dados da marca '{brand['nome']}' salvos no cache.\n")
+            else:
+                print(f"  Marca {brand['nome']} não foi salva - sem dados.")
+    else:
+        print("Erro ao consultar marcas:", response.status_code)
 
-
-
-#piyox75675@gianes.com
-#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMDJlZDQxOS00MGU5LTRkYTYtOGI2Mi1hZDU1OWEyODllMWYiLCJlbWFpbCI6InBpeW94NzU2NzVAZ2lhbmVzLmNvbSIsImlhdCI6MTczMDgyNTE2MH0.KVxC2D0kl2roVNKEMxs3uklrzoHOIJCtT7KGCiQdUVA
-
-#kifex19416@cironex.com
-#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmI0NWEyNy1jNzE3LTQwYmUtOTY5Yy1iYmFjZTMwOWE0YzgiLCJlbWFpbCI6ImtpZmV4MTk0MTZAY2lyb25leC5jb20iLCJpYXQiOjE3MzA4MjU4OTh9.23uudaDssomggflvsVFcWPZBKrMH9rO8LJb0SKe1OAQ
-
-#naxidav328@edectus.com
-#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjYxNWM0NS0yZWJlLTQ2ZDEtODZiZC04MzBlZTU1ZGJhNTAiLCJlbWFpbCI6Im5heGlkYXYzMjhAZWRlY3R1cy5jb20iLCJpYXQiOjE3MzA4Mjk4MzB9.pQN-JA_M46hptGwxRUM7RaCYcSxmGG3BHQnBrTVRxbQ
-
-#nasan40841@cironex.com
-#
-
-#matiji3549@inikale.com
-#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZTIyZmNkNC1iYTNjLTQ1YjEtODBiNC1jYjhmNWYzYzc0ZjIiLCJlbWFpbCI6Im1hdGlqaTM1NDlAaW5pa2FsZS5jb20iLCJpYXQiOjE3MzA4NTIyNDN9.j_UDPxC37z0WobggOPnIE5R04egGy6xaEkutR3VfiuU
+# Exemplo de uso
+api_key = input("Digite a chave da API: ")  # Solicita a chave da API ao usuário
+tipo_veiculo = "carros"  # Pode ser "carros", "motos" ou "caminhoes"
+fetch_and_cache_all_data(tipo_veiculo, api_key)
