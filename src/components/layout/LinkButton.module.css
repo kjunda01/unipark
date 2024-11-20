@@ -1,11 +1,11 @@
 .btn {
-  background-color: var(--amarelo-background);
-  color: var(--azul-escuro-unilavras);
-  padding: 0.5em 1em;
-  text-decoration: none;
-  transition: 1s;
+    background-color: var(--amarelo-background);
+    color: var(--azul-escuro-unilavras);
+    padding: 0.5em 1em;
+    text-decoration: none;
+    transition: 1s;
 }
 
 .bnt:hover {
-  color: var(--amarelo-background);
+    color: var(--amarelo-background);
 }

@@ -10,23 +10,25 @@ import AdicionarVeiculo from "./components/pages/AdicionarVeiculo";
 import TempoReal from "./components/pages/TempoReal";
 import Veiculos from "./components/pages/Veiculos";
 
-
 function App() {
-  return (
-    <Router>
-      <Header />
-      <Container customClass="minHeight">
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/veiculos" element={<Veiculos />} />
-          <Route exact path="/adicionarveiculo" element={<AdicionarVeiculo />} />
-          <Route exact path="/aovivo" element={<TempoReal />} />
-
-        </Routes>
-      </Container>
-      <Footer />
-    </Router>
-  );
+    return (
+        <Router>
+            <Header />
+            <Container customClass="minHeight">
+                <Routes>
+                    <Route exact path="/" element={<Home />} />
+                    <Route exact path="/veiculos" element={<Veiculos />} />
+                    <Route
+                        exact
+                        path="/adicionarveiculo"
+                        element={<AdicionarVeiculo />}
+                    />
+                    <Route exact path="/aovivo" element={<TempoReal />} />
+                </Routes>
+            </Container>
+            <Footer />
+        </Router>
+    );
 }
 
 export default App;

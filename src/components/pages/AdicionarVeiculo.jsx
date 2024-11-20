@@ -1,13 +1,15 @@
 import LinkButton from "../layout/LinkButton";
 import styles from "./AdicionarVeiculo.module.css";
+import FormAdicionarVeiculo from "../form/FormAdicionarVeiculo";
 
 import Container from "../layout/Container";
-function AdicionarVeiculo() {
-  return (
-    <Container>
-      <LinkButton texto="Olá" to="/" />
-    </Container>
-  );
-}
+
+const AdicionarVeiculo = () => {
+    return (
+        <Container>
+            <FormAdicionarVeiculo/>
+        </Container>
+    );
+};
 
 export default AdicionarVeiculo;

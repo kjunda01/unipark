@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Faz com que o container ocupe todo o espaço disponível */
+}
+
+.header {
+    background-color: #4caf50; /* Cor de fundo do cabeçalho */
+    color: white;
+    text-align: center;
+    height: 15vh; /* 15% da altura da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    background-color: #f4f4f4; /* Cor de fundo do container */
+    flex: 1; /* Faz com que o container ocupe o espaço restante */
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    padding: 20px;
+}
+
+.footer {
+    background-color: #333; /* Cor de fundo do rodapé */
+    color: white;
+    text-align: center;
+    height: 20vh; /* 20% da altura da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
