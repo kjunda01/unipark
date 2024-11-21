@@ -2,22 +2,8 @@ import styled from "styled-components";
 
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-`;
-const Container = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-
-    padding: 20px;
-    text-align: center;
-    width: 100%;
-    background-color: whitesmoke;
-`;
+import { Wrapper } from "../components/layout/Wrapper.style";
+import { Container } from "../components/layout/Container.style";
 
 const Filtro = styled.div`
     display: flex;

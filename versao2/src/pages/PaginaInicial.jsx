@@ -1,23 +1,8 @@
 import styled from "styled-components";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-`;
-
-const Container = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-    width: 100%;
-    background-color: whitesmoke;
-`;
+import { Wrapper } from "../components/layout/Wrapper.style";
+import { Container } from "../components/layout/Container.style";
 
 const Span = styled.span`
     background-color: ${({ theme }) => theme.colors.amarelo};

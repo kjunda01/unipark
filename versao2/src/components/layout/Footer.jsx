@@ -2,7 +2,7 @@ import React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import styled from "styled-components";
 
-export const CustomFooter = styled.footer`
+const CustomFooter = styled.footer`
     background-color: ${({ theme }) => theme.colors.cinzaEscuro};
     color: white;
     height: 20vh;

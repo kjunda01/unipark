@@ -47,15 +47,17 @@ const Li = styled.li`
 const Header = () => {
     return (
         <CustomHeader>
-            <img
-                src="https://unilavras.edu.br/new_site/wp-content/uploads/2018/10/Logo-para-site-barra-de-menu-1.png"
-                alt="Logo-para-site-barra-de-menu"
-            />
+            <Link to="/">
+                <img
+                    src="https://unilavras.edu.br/new_site/wp-content/uploads/2018/10/Logo-para-site-barra-de-menu-1.png"
+                    alt="Logo-para-site-barra-de-menu"
+                />
+            </Link>
 
             <Nav>
                 <Ul>
                     <Li>
-                        <Link to="/">AO VIVO</Link>
+                        <Link to="/aovivo">AO VIVO</Link>
                     </Li>
                     <Li>
                         <Link to="/buscarveiculo">Consultar</Link>
