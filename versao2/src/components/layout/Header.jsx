@@ -58,7 +58,10 @@ const Header = () => {
                         <Link to="/">AO VIVO</Link>
                     </Li>
                     <Li>
-                        <Link to="/consulta">Consultar</Link>
+                        <Link to="/buscarveiculo">Consultar</Link>
+                    </Li>
+                    <Li>
+                        <Link to="/cadastrarveiculo">Novo Veículo</Link>
                     </Li>
                 </Ul>
             </Nav>
