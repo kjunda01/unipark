@@ -11,17 +11,41 @@ import Input from "../components/form/Input";
 import Label from "../components/form/Label";
 import BotaoEnviar from "../components/BotaoEnviar";
 
-const Div = styled.div``;
-const Form = styled.form``;
-const Datalist = styled.datalist``;
+const Div = styled.div`
+    margin-bottom: 1.5rem;
+`;
+const Form = styled.form`
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width:70vw;
+    margin: 0 auto;
+`;
+const Select = styled.select`
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+        border-color: #007bff;
+    }
+`;
+
+
 
 const PaginaNovoVeiculo = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const [tipo, setTipo] = useState(1);
-    const [marca, setMarca] = useState(1);
-    const [modelo, setModelo] = useState(1);
-    const [ano, setAno] = useState("1992-1");
+    const [tipo, setTipo] = useState();
+    const [marca, setMarca] = useState();
+    const [modelo, setModelo] = useState();
+    const [ano, setAno] = useState();
 
     const [todasAsMarcas, setTodasAsMarcas] = useState([]);
     const [todosOsModelos, setTodosOsModelos] = useState([]);
@@ -62,17 +86,17 @@ const PaginaNovoVeiculo = () => {
             .finally(() => setCarregandoModelos(false));
     }, [tipo, marca]);
 
-    // useEffect(() => {
-    //     setCarregandoAnos(true);
-    //     getAnos(tipo, marca, modelo)
-    //         .then((ano) => {
-    //             setTodosOsAnos(ano || []);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Erro ao processar anos:", error);
-    //         })
-    //         .finally(() => setCarregandoAnos(false));
-    // }, [tipo, marca, modelo]);
+    useEffect(() => {
+        setCarregandoAnos(true);
+        getAnos(tipo, marca, modelo)
+            .then((ano) => {
+                setTodosOsAnos(ano || []);
+            })
+            .catch((error) => {
+                console.error("Erro ao processar anos:", error);
+            })
+            .finally(() => setCarregandoAnos(false));
+    }, [tipo, marca, modelo]);
 
     return (
         <>
@@ -80,6 +104,92 @@ const PaginaNovoVeiculo = () => {
                 <Header />
                 <Container>
                     <Form>
+                        <Div>
+                            <Label>Tipo do veículo</Label>
+                            <Select
+                                value={tipo}
+                                onChange={(event) => {
+                                    setTipo(event.target.value);
+                                }}
+                            >
+                                <option value={""}>Selecione</option>
+                                <option value={1}>Carro</option>
+                                <option value={2}>Moto</option>
+                                <option value={3}>Caminhão</option>
+                            </Select>
+                        </Div>
+                        <Div>
+                            <Label>Marca</Label>
+                            <Select
+                                value={marca}
+                                onChange={(event) => {
+                                    setMarca(event.target.value);
+                                }}
+                            >
+                                {carregandoMarcas ? (
+                                    <option>Carregando...</option>
+                                ) : todasAsMarcas.length > 0 ? (
+                                    todasAsMarcas.map((marca) => (
+                                        <option
+                                            key={marca.Value}
+                                            value={marca.Value}
+                                        >
+                                            {marca.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Nenhuma marca disponível</option>
+                                )}
+                            </Select>
+                        </Div>
+                        <Div>
+                            <Label>Modelo</Label>
+                            <Select
+                                value={modelo}
+                                onChange={(event) => {
+                                    setModelo(event.target.value);
+                                }}
+                            >
+                                {carregandoModelos ? (
+                                    <option>Carregando...</option>
+                                ) : todosOsModelos.length > 0 ? (
+                                    todosOsModelos.map((modelo) => (
+                                        <option
+                                            key={modelo.Value}
+                                            value={modelo.Value}
+                                        >
+                                            {modelo.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Nenhum modelo disponível</option>
+                                )}
+                            </Select>
+                        </Div>
+                        <Div>
+                            <Label>Ano</Label>
+                            <Select
+                                value={ano}
+                                onChange={(event) => {
+                                    setAno(event.target.value);
+                                }}
+                            >
+                                {carregandoAnos ? (
+                                    <option>Carregando...</option>
+                                ) : todosOsAnos.length > 0 ? (
+                                    todosOsAnos.map((ano) => (
+                                        <option
+                                            key={ano.Value}
+                                            value={ano.Value}
+                                        >
+                                            {ano.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Nenhum ano disponível</option>
+                                )}
+                            </Select>
+                        </Div>
                         <Div>
                             <Label>Placa</Label>
                             <Input
@@ -90,66 +200,6 @@ const PaginaNovoVeiculo = () => {
                                 }
                             />
                         </Div>
-                                                
-                        
-                        
-                        <Div>
-                            <Label>Tipo do veículo</Label>
-                            <Datalist
-                                value={tipo}
-                                onChange={(event) => {
-                                    setTipo(event.target.value);
-                                }}
-                            >
-                                <option value={1}>Carro</option>
-                                <option value={2}>Moto</option>
-                                <option value={3}>Caminhão</option>
-                            </Datalist>
-                        </Div>
-                        <Div>
-                            <Label>Marca</Label>
-                            <Datalist
-                                value={marca}
-                                onChange={(event) => {
-                                    setMarca(event.target.value);
-                                }}
-                            >
-                                {carregandoMarcas ? (
-                                    <option>Selecione...</option>
-                                ) : (
-                                    todasAsMarcas.map((marca) => (
-                                        <option
-                                            key={marca.Value}
-                                            value={marca.Value}
-                                        >
-                                            {marca.Label.toUpperCase()}
-                                        </option>
-                                    ))
-                                )}
-                            </Datalist>
-                        </Div>
-                        <Div>
-                            <Label>Modelo</Label>
-                            <Datalist
-                                value={modelo}
-                                onChange={(event) => {
-                                    setModelo(event.target.value);
-                                }}
-                            >
-                                {carregandoModelos ? (
-                                    <option>Selecione...</option>
-                                ) : (
-                                    todosOsModelos.map((modelo) => (
-                                        <option
-                                            key={modelo.Value}
-                                            value={modelo.Value}
-                                        >
-                                            {modelo.Label.toUpperCase()}
-                                        </option>
-                                    ))
-                                )}
-                            </Datalist>
-                        </Div>
                         <Div>
                             <Label>Cor</Label>
                             <Input
@@ -158,28 +208,7 @@ const PaginaNovoVeiculo = () => {
                                 onChange={(event) => setCor(event.target.value)}
                             />
                         </Div>
-                        <Div>
-                            <Label>Ano</Label>
-                            <Datalist
-                                value={ano}
-                                onChange={(event) => {
-                                    setAno(event.target.value);
-                                }}
-                            >
-                                {carregandoAnos ? (
-                                    <option>Selecione...</option>
-                                ) : (
-                                    todosOsAnos.map((ano) => (
-                                        <option
-                                            key={ano.Value}
-                                            value={ano.Value}
-                                        >
-                                            {ano.Label.toUpperCase()}
-                                        </option>
-                                    ))
-                                )}
-                            </Datalist>
-                        </Div>
+
                         <Div>
                             <Label>Proprietário</Label>
                             <Input
@@ -202,10 +231,10 @@ const PaginaNovoVeiculo = () => {
                         </Div>
                         <Div>
                             <Label>Status</Label>
-                            <input type="text" /><Datalist>
+                            <Select>
                                 <option value={"Permitido"}>Permitido</option>
                                 <option value={"Proibido"}>Proibido</option>
-                            </Datalist>
+                            </Select>
                         </Div>
                         <Div>
                             <BotaoEnviar

@@ -1,15 +1,21 @@
 import styled from "styled-components";
 
 const CustomBotaoEnviar = styled.button`
-    width: 150px;
-    height: 45px;
-    margin: 10px;
-    border: none;
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
     background-color: ${({ theme }) => theme.colors.azulClaro};
-    color: white;
-    border-radius: 8px;
-    font-size: 20px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
     cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: #0056b3;
+    }
 `;
 
 export const BotaoEnviar = ({ ...rest }) => {
