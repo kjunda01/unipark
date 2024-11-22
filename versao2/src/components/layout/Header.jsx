@@ -1,7 +1,5 @@
-import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import PaginaInicial from "../../pages/PaginaInicial";
 
 export const CustomHeader = styled.header`
     background-color: white;
@@ -14,21 +12,19 @@ export const CustomHeader = styled.header`
 `;
 
 const Nav = styled.nav`
-    a {
-        text-decoration: none;
-        font-size: 16px;
-        padding: 8px 16px;
-        display: block;
-        transition: background-color 0.3s;
-    }
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    display: block;
+    transition: background-color 0.3s;
 `;
 
 const Ul = styled.ul`
+    display: flex;
+    justify-content: center;
     list-style-type: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
 `;
 
 const Li = styled.li`
@@ -42,6 +38,7 @@ const Li = styled.li`
         background-color: ${({ theme }) => theme.colors.amarelo};
         border-radius: 4px;
     }
+
 `;
 
 const Header = () => {

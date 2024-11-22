@@ -81,7 +81,7 @@ const BotaoCancelar = styled.button`
 const Modal = ({
     setIsOpen,
     title = "Título",
-    body = "",
+    body = "Corpo do modal",
     BtnEnviar = "Enviar",
     BtnCancel = "Cancelar",
 }) => {
