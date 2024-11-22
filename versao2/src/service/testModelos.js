@@ -8,7 +8,7 @@ const URL_CONSULTAR_MODELOS =
 
 const codigoTabelaPadrao = 315;
 
-export const getModelos = async (
+const getModelos = async (
     codigoTipoVeiculo,
     codigoMarca,
     codigoTabelaReferencia = codigoTabelaPadrao,

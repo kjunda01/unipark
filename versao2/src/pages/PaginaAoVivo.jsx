@@ -5,7 +5,7 @@ import { Container } from "../components/layout/Container.style";
 
 
 
-const PaginaInicial = () => {
+const PaginaAoVivo = () => {
     return (
         <Wrapper>
             <Header />
@@ -17,5 +17,4 @@ const PaginaInicial = () => {
     );
 };
 
-export default PaginaInicial;
-
+export default PaginaAoVivo;

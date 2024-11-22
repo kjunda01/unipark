@@ -1,22 +1,28 @@
 import axios from "axios";
 
-const URL_CONSULTAR_MARCAS =
-    "https://veiculos.fipe.org.br/api/veiculos///ConsultarMarcas";
+const URL_CONSULTAR_ANOS =
+    "https://veiculos.fipe.org.br/api/veiculos//ConsultarAnoModelo";
 // Tem que passar "codigoTipoVeiculo" - Vai de 1 a 3
 // Tem que passar "codigoTabelaReferencia" - 315 é nov/2024
+// Tem que passar "codigoMarca" - Código referente a marca específica
+// Tem que passar "codigoModelo" - Codigo do modelo específico
 
 const codigoTabelaPadrao = 315;
 
-const getMarcas = async (
+const getAnos = async (
     codigoTipoVeiculo,
+    codigoMarca,
+    codigoModelo,
     codigoTabelaReferencia = codigoTabelaPadrao
 ) => {
-    return axios({
+    return await axios({
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        url: URL_CONSULTAR_MARCAS,
+        url: URL_CONSULTAR_ANOS,
         data: {
             codigoTipoVeiculo: codigoTipoVeiculo,
+            codigoMarca: codigoMarca,
+            codigoModelo: codigoModelo,
             codigoTabelaReferencia: codigoTabelaReferencia,
         },
     })
@@ -26,11 +32,14 @@ const getMarcas = async (
         .catch((error) => console.log(error));
 };
 
-let tipo = 3
-getMarcas(tipo)
-    .then((marcas) => {
-        console.log(marcas);
+const tipo = 1;
+const marca = 1;
+const modelo = 1;
+
+getAnos(tipo, marca, modelo)
+    .then((modelo) => {
+        console.log(modelo);
     })
     .catch((error) => {
-        console.error("Erro ao processar marcas:", error);
+        console.error("Erro ao processar modelos:", error);
     });

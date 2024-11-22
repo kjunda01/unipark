@@ -11,6 +11,13 @@ const URL_CONSULTAR_MODELOS =
 // Tem que passar "codigoTabelaReferencia" - 315 é nov/2024
 // Tem que passar "codigoMarca" - Código referente a marca específica
 
+const URL_CONSULTAR_ANOS =
+    "https://veiculos.fipe.org.br/api/veiculos//ConsultarAnoModelo";
+// Tem que passar "codigoTipoVeiculo" - Vai de 1 a 3
+// Tem que passar "codigoTabelaReferencia" - 315 é nov/2024
+// Tem que passar "codigoMarca" - Código referente a marca específica
+// Tem que passar "codigoModelo" - Codigo do modelo específico
+
 const codigoTabelaPadrao = 315;
 
 export const getMarcas = async (
@@ -35,7 +42,7 @@ export const getMarcas = async (
 export const getModelos = async (
     codigoTipoVeiculo,
     codigoMarca,
-    codigoTabelaReferencia = codigoTabelaPadrao,
+    codigoTabelaReferencia = codigoTabelaPadrao
 ) => {
     return await axios({
         method: "post",
@@ -43,12 +50,35 @@ export const getModelos = async (
         url: URL_CONSULTAR_MODELOS,
         data: {
             codigoTipoVeiculo: codigoTipoVeiculo,
-            codigoTabelaReferencia: codigoTabelaReferencia,
             codigoMarca: codigoMarca,
+            codigoTabelaReferencia: codigoTabelaReferencia,
         },
     })
         .then((response) => {
             return response.data.Modelos;
+        })
+        .catch((error) => console.log(error));
+};
+
+export const getAnos = async (
+    codigoTipoVeiculo,
+    codigoMarca,
+    codigoModelo,
+    codigoTabelaReferencia = codigoTabelaPadrao
+) => {
+    return await axios({
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        url: URL_CONSULTAR_ANOS,
+        data: {
+            codigoTipoVeiculo: codigoTipoVeiculo,
+            codigoMarca: codigoMarca,
+            codigoModelo: codigoModelo,
+            codigoTabelaReferencia: codigoTabelaReferencia,
+        },
+    })
+        .then((response) => {
+            return response.data;
         })
         .catch((error) => console.log(error));
 };
