@@ -1,5 +1,9 @@
 import styled from "styled-components";
+import { getUltimoVeiculo } from "../../service/ApiMockApi";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+// Estilo do componente de fundo
 const CustomBackground = styled.div`
     position: relative;
     width: 671px;
@@ -8,8 +12,13 @@ const CustomBackground = styled.div`
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 20px;
+    }
 `;
 
+// Estilo do título do box
 const BoxTitulo = styled.div`
     width: 100%;
     height: 8vh;
@@ -18,17 +27,27 @@ const BoxTitulo = styled.div`
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0 20px;
     color: #ffffff;
+    justify-content: space-between;
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
 `;
 
-const Titulo = styled.h3`
+// Estilo do título principal (identificação do veículo)
+const Titulo = styled.h1`
     font-weight: 700;
     font-size: 36px;
     line-height: 42px;
+    margin: 0;
+    @media (max-width: 768px) {
+        font-size: 28px;
+    }
 `;
 
+// Estilo do conteúdo principal
 const BoxConteudo = styled.div`
     flex: 1;
     background: rgba(51, 183, 119, 0.2);
@@ -40,29 +59,34 @@ const BoxConteudo = styled.div`
     border-radius: 10px;
 `;
 
+// Estilo da tabela
 const Tabela = styled.div`
     display: grid;
     grid-template-columns: 2fr 1fr; /* Primeira coluna maior */
     grid-gap: 10px;
     width: 100%;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
 `;
+
+// Estilo da linha da tabela
 const Linha = styled.div`
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
     color: #021d34;
     text-align: left;
-    word-wrap: break-word; /* Quebra texto longo */
+    word-wrap: break-word;
     word-break: break-word;
-    padding: 5px; /* Espaçamento interno */
-    border: 1px solid transparent; /* Auxilia na organização visual */
-
-    /* Formatação para o rótulo em negrito */
+    padding: 5px;
+    border: 1px solid transparent;
     & strong {
         font-weight: 700;
     }
 `;
 
+// Estilo do box de status
 const BoxStatus = styled.div`
     display: flex;
     flex-direction: column;
@@ -71,6 +95,7 @@ const BoxStatus = styled.div`
     margin-top: 10px;
 `;
 
+// Estilo do label de status
 const StatusLabel = styled.h3`
     font-weight: 700;
     font-size: 22.75px;
@@ -78,20 +103,45 @@ const StatusLabel = styled.h3`
     color: #021d34;
 `;
 
+// Estilo do valor de status, com a possibilidade de customização de cor
 const StatusValue = styled.h1`
     font-weight: 700;
     font-size: 33.33px;
     line-height: 39px;
-    color: #33b777;
+    color: ${(props) => (props.status === "PERMITIDO" ? "#33b777" : "#ff4c4c")};
     margin: 0;
 `;
 
 const InfoVeiculo = () => {
+    const [ultimoVeiculo, setUltimoVeiculo] = useState([]);
+
+    // useEffect para buscar os dados ao montar o componente
+    useEffect(() => {
+        const fetchUltimoVeiculo = async () => {
+            try {
+                const data = await getUltimoVeiculo();
+                setUltimoVeiculo(data);
+            } catch (error) {
+                console.error("Erro ao carregar último veículo:", error);
+            }
+        };
+
+        fetchUltimoVeiculo();
+    }, []);
+    
     return (
         <CustomBackground>
             <BoxTitulo>
+                <Titulo>
+                    {ultimoVeiculo.length > 0 ? (
+                        ultimoVeiculo.map((x) => (
+                            <div key={x.id}>{x.placa}</div>
+                        ))
+                    ) : (
+                        <p>Carregando...</p>
+                    )}
+                </Titulo>
                 <Titulo>BRA0S17</Titulo>
-                <Titulo>Icone</Titulo>
             </BoxTitulo>
             <BoxConteudo>
                 <Tabela>
@@ -118,7 +168,7 @@ const InfoVeiculo = () => {
                 </Tabela>
                 <BoxStatus>
                     <StatusLabel>Status</StatusLabel>
-                    <StatusValue>PERMITIDO</StatusValue>
+                    <StatusValue status="PERMITIDO">PERMITIDO</StatusValue>
                 </BoxStatus>
             </BoxConteudo>
         </CustomBackground>

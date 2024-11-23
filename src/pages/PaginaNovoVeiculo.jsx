@@ -1,10 +1,12 @@
 import axios from "axios";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import { getAnos, getMarcas, getModelos } from "../service/ApiFIPE";
 import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
 import { useEffect, useState } from "react";
+import { Form } from "../components/form/Form.style";
 
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
@@ -15,17 +17,17 @@ import {
     Modal,
     ModalBackground,
     ModalCancelButton,
+    ModalSair,
     ModalSendButton,
 } from "../components/Modal";
-import { Form } from "../components/form/Form.style";
 
 const Div = styled.div`
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px;
 `;
 
 const Row = styled.div`
     display: flex;
-    gap: 1rem;
+    gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 20px;
 `;
@@ -37,7 +39,7 @@ const Column = styled.div`
 
 const Select = styled.select`
     width: 100%;
-    padding: 0.75rem;
+    padding: 10px;
     font-size: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -64,6 +66,7 @@ const PaginaNovoVeiculo = () => {
     const [carregandoModelos, setCarregandoModelos] = useState(true);
     const [carregandoAnos, setCarregandoAnos] = useState(true);
 
+    const [tipoTexto, setTipoTexto] = useState("");
     const [marcaTexto, setMarcaTexto] = useState("");
     const [modeloTexto, setModeloTexto] = useState("");
     const [anoTexto, setAnoTexto] = useState("");
@@ -75,9 +78,10 @@ const PaginaNovoVeiculo = () => {
     const [status, setStatus] = useState("Permitido");
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isCode200, setIsCode200] = useState(false);
 
     const objeto = {
-        tipo: tipo,
+        tipo: tipoTexto,
         marca: marcaTexto,
         modelo: modeloTexto,
         ano: anoTexto,
@@ -120,30 +124,59 @@ const PaginaNovoVeiculo = () => {
         return texto;
     };
 
-    const handleSubmit = async (e) => {
-        
+    const irAteAPaginaConsulta = useNavigate();
+
+    const handleSubmit = async () => {
         setIsOpen(!isOpen);
         if (
-            tipo &&
-            marca &&
-            modelo &&
-            ano &&
+            tipoTexto &&
+            marcaTexto &&
+            modeloTexto &&
+            anoTexto &&
             placa &&
             cor &&
             proprietario &&
             matricula &&
             status
         ) {
-            await axios.post(
-                "https://unipark-a9b95-default-rtdb.firebaseio.com/veiculos.json",
-                objeto
-            );
+            try {
+                const response = await axios.post(
+                    "https://6741e396e4647499008f23d9.mockapi.io/api/veiculos",
+                    objeto
+                );
+
+                // Caso o POST seja bem-sucedido, redirecionar para a página desejada
+                if (response.status !== 404) {
+                    // Verifique o código de status HTTP para garantir sucesso
+                    irAteAPaginaConsulta("/buscarveiculo"); // Substitua com a URL desejada
+                }
+            } catch (error) {
+                console.error("Erro ao enviar os dados", error);
+                // Aqui você pode adicionar um tratamento de erro, como um toast
+            }
+        } else {
+            console.error("Todos os campos são obrigatórios.");
+            // Adicione mensagem de erro ou validação aqui, se necessário
         }
-        // Adicionar um toast message aqui
     };
 
     const handleCancel = () => {
         setIsOpen(!isOpen);
+    };
+
+    const redefinirEstadosDependentes = () => {
+        // Redefine os estados dependentes
+        setMarca("");
+        setModelo("");
+        setAno("");
+        setMarcaTexto("");
+        setModeloTexto("");
+        setAnoTexto("");
+
+        // Limpa as listas dependentes
+        setTodasAsMarcas([]);
+        setTodosOsModelos([]);
+        setTodosOsAnos([]);
     };
 
     return (
@@ -158,11 +191,25 @@ const PaginaNovoVeiculo = () => {
                                 <Select
                                     required
                                     value={tipo}
-                                    onChange={(event) =>
-                                        setTipo(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setTipo(event.target.value);
+
+                                        switch (event.target.value) {
+                                            case "1":
+                                                setTipoTexto("Carro");
+                                                break;
+                                            case "2":
+                                                setTipoTexto("Moto");
+                                                break;
+                                            case "3":
+                                                setTipoTexto("Caminhão");
+                                        }
+                                        redefinirEstadosDependentes();
+                                    }}
                                 >
-                                    <option value={""}>Selecione</option>
+                                    <option value="">
+                                        Selecione um tipo...
+                                    </option>
                                     <option value={1}>Carro</option>
                                     <option value={2}>Moto</option>
                                     <option value={3}>Caminhão</option>
@@ -178,6 +225,9 @@ const PaginaNovoVeiculo = () => {
                                         setMarcaTexto(handleTextChange(event));
                                     }}
                                 >
+                                    <option value="">
+                                        Selecione uma marca...
+                                    </option>
                                     {carregandoMarcas ? (
                                         <option>Carregando...</option>
                                     ) : todasAsMarcas.length > 0 ? (
@@ -209,6 +259,9 @@ const PaginaNovoVeiculo = () => {
                                         setModeloTexto(handleTextChange(event));
                                     }}
                                 >
+                                    <option value="">
+                                        Selecione um modelo...
+                                    </option>
                                     {carregandoModelos ? (
                                         <option>Carregando...</option>
                                     ) : todosOsModelos.length > 0 ? (
@@ -238,6 +291,7 @@ const PaginaNovoVeiculo = () => {
                                         setAnoTexto(handleTextChange(event));
                                     }}
                                 >
+                                    <option value="">Selecione o ano...</option>
                                     {carregandoAnos ? (
                                         <option>Carregando...</option>
                                     ) : todosOsAnos.length > 0 ? (
@@ -338,22 +392,43 @@ const PaginaNovoVeiculo = () => {
                     {isOpen && (
                         <ModalBackground>
                             <Modal>
-                                <h3>Confirmar Dados</h3>
-                                <Div>Ano: {objeto.ano}</Div>
-                                <Div>Cor: {objeto.cor}</Div>
-                                <Div>Marca: {objeto.marca}</Div>
-                                <Div>Matricula: {objeto.matricula}</Div>
-                                <Div>Modelo: {objeto.modelo}</Div>
-                                <Div>Placa: {objeto.placa}</Div>
-                                <Div>Proprietário: {objeto.proprietario}</Div>
-                                <Div>Status: {objeto.status}</Div>
+                                <ModalSair onClick={handleCancel}>X</ModalSair>
+                                <h2>Confirmar Dados</h2>
                                 <Div>
-                                    Tipo:
-                                    {objeto.tipo === 1
-                                        ? " Carro"
-                                        : objeto.tipo === 2
-                                          ? " Moto"
-                                          : " Caminhão"}
+                                    <strong>Tipo:</strong>
+                                    {objeto.tipo}
+                                </Div>
+                                <Div>
+                                    <strong>Marca: </strong>
+                                    {objeto.marca}
+                                </Div>
+                                <Div>
+                                    <strong>Modelo: </strong>
+                                    {objeto.modelo}
+                                </Div>
+                                <Div>
+                                    <strong>Ano: </strong>
+                                    {objeto.ano}
+                                </Div>
+                                <Div>
+                                    <strong>Placa: </strong>
+                                    {objeto.placa}
+                                </Div>
+                                <Div>
+                                    <strong>Cor: </strong>
+                                    {objeto.cor}
+                                </Div>
+                                <Div>
+                                    <strong>Proprietário: </strong>
+                                    {objeto.proprietario}
+                                </Div>
+                                <Div>
+                                    <strong>Matricula: </strong>
+                                    {objeto.matricula}
+                                </Div>
+                                <Div>
+                                    <strong>Status: </strong>
+                                    {objeto.status}
                                 </Div>
 
                                 <ModalSendButton

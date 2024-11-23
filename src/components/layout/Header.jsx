@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-// Estilos do Header
+
 const CustomHeader = styled.header`
     background-color: white;
     color: ${({ theme }) => theme.colors.azulEscuro};
@@ -20,7 +20,6 @@ const CustomHeader = styled.header`
     }
 `;
 
-// Estilo para Link personalizado
 const StyledLink = styled(Link)`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.azulEscuro};
@@ -28,7 +27,7 @@ const StyledLink = styled(Link)`
     transition: color 0.3s;
 
     &:hover {
-        color: ${({ theme }) => theme.colors.amarelo};
+        color: ${({ theme }) => theme.colors.azulClaro};
     }
 `;
 
@@ -47,10 +46,8 @@ const Ul = styled.ul`
 
 const Li = styled.li`
     margin: 0 15px;
-    padding: 10px;
-    transition:
-        background-color 0.3s,
-        padding 0.3s;
+    padding: 5px;
+    transition: background-color 0.3s, padding 0.3s;
     cursor: pointer;
 
     &:hover {

@@ -149,3 +149,9 @@ export const ModalCancelButton = styled(ModalSendButton)`
         background-color: #c82333;
     }
 `;
+
+export const ModalSair = styled.div`
+    text-align: right;
+    cursor: pointer;
+    color: red;
+`;
