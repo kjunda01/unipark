@@ -1,47 +1,105 @@
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
-import styles from "./Footer.module.css";
+import styled from "styled-components";
+
+const CustomFooter = styled.footer`
+    background-color: ${({ theme }) => theme.colors.cinzaEscuro};
+    color: white;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    z-index: 100;
+
+    ul {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        cursor: pointer;
+        font-size: 24px;
+        transition:
+            transform 0.3s ease,
+            color 0.3s ease;
+    }
+
+    li:hover {
+        transform: scale(1.1);
+        color: ${({ theme }) => theme.colors.primary};
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    a:active {
+        color: yellow;
+    }
+
+    span {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 10px;
+
+        ul {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+`;
+
+const socialLinks = [
+    {
+        href: "https://www.facebook.com/unilavras",
+        icon: <FaFacebook />,
+        label: "Facebook",
+    },
+    {
+        href: "https://www.instagram.com/unilavras",
+        icon: <FaInstagram />,
+        label: "Instagram",
+    },
+    {
+        href: "https://br.linkedin.com/school/unilavras-centro-universitario/",
+        icon: <FaLinkedin />,
+        label: "LinkedIn",
+    },
+];
 
 const Footer = () => {
-    const paginaFacebook = () =>
-        window.open("https://www.facebook.com/unilavras", "_blank");
-
-    const paginaInstagram = () =>
-        window.open("https://www.instagram.com/unilavras", "_blank");
-
-    const paginaLinkedin = () => {
-        window.open(
-            "https://br.linkedin.com/school/unilavras-centro-universitario/",
-            "_blank"
-        );
-    };
-
     return (
-        <footer className={styles.rodape}>
-            <div className={styles.imagemRodape}>
-                <img
-                    src="src/img/logo_unilavras_rodape.png"
-                    alt="Logo unilavras"
-                    className={styles.imagem}
-                />
-            </div>
-            <div className={styles.mensagemRodape}>
-                <ul className={styles.listaIcones}>
-                    <li className={styles.icones}>
-                        <FaFacebook onClick={paginaFacebook} />
+        <CustomFooter>
+            <ul>
+                {socialLinks.map((link) => (
+                    <li key={link.label}>
+                        <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={link.label}
+                        >
+                            {link.icon}
+                        </a>
                     </li>
-                    <li className={styles.icones}>
-                        <FaInstagram onClick={paginaInstagram} />
-                    </li>
-                    <li className={styles.icones}>
-                        <FaLinkedin onClick={paginaLinkedin} />
-                    </li>
-                </ul>
-                <span className={styles.mensagem}>
-                    UNILAVRAS - UNIPARK <br />
-                    &copy; Todos os direitos reservados - 2024
-                </span>
-            </div>
-        </footer>
+                ))}
+            </ul>
+            <span>
+                UNILAVRAS - UNIPARK <br />
+                &copy; Todos os direitos reservados - 2024
+            </span>
+        </CustomFooter>
     );
 };
+
 export default Footer;

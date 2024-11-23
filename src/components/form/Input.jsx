@@ -1,31 +1,23 @@
-import styles from "./Input.module.css";
+import styled from "styled-components";
 
-import React from "react";
+const CustomInput = styled.input`
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
 
-const Input = ({
-    type,
-    text,
-    name,
-    placeholder,
-    value,
-    onChange,
-    required,
-}) => {
-    return (
-        <div>
-            <label className={styles.form_control}>
-                {text}:
-                <input
-                    type={type}
-                    name={name}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                    required={required}
-                />
-            </label>
-        </div>
-    );
+    &:focus {
+        border-color: #007bff;
+    }
+`;
+
+const Input = ({ ...rest }) => {
+    return <CustomInput {...rest} />;
 };
 
 export default Input;
+

@@ -1,33 +1,33 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-
-import Container from "./components/layout/Container";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
-
-import Home from "./components/pages/Home";
-import AdicionarVeiculo from "./components/pages/AdicionarVeiculo";
-import TempoReal from "./components/pages/TempoReal";
-import Veiculos from "./components/pages/Veiculos";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./styles/global/theme";
+import GlobalStyle from "./styles/global/GlobalStyle";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import PaginaInicial from "./pages/PaginaInicial";
+import PaginaConsulta from "./pages/PaginaConsulta";
+import PaginaNovoVeiculo from "./pages/PaginaNovoVeiculo";
+import PaginaAoVivo from "./pages/PaginaAoVivo";
 
 function App() {
     return (
-        <Router>
-            <Header />
-            <Container customClass="minHeight">
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <BrowserRouter>
                 <Routes>
-                    <Route exact path="/" element={<Home />} />
-                    <Route exact path="/veiculos" element={<Veiculos />} />
-                    <Route
-                        exact
-                        path="/adicionarveiculo"
-                        element={<AdicionarVeiculo />}
-                    />
-                    <Route exact path="/aovivo" element={<TempoReal />} />
+                    <Route>
+                        <Route path="/" element={<PaginaInicial />} />
+                        <Route path="/aovivo" element={<PaginaAoVivo />} />
+                        <Route
+                            path="/buscarveiculo"
+                            element={<PaginaConsulta />}
+                        />
+                        <Route
+                            path="/cadastrarveiculo"
+                            element={<PaginaNovoVeiculo />}
+                        />
+                    </Route>
                 </Routes>
-            </Container>
-            <Footer />
-        </Router>
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }
 
