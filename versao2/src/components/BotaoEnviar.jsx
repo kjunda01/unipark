@@ -14,7 +14,7 @@ const CustomBotaoEnviar = styled.button`
     transition: background 0.2s;
 
     &:hover {
-        background: #0056b3;
+        background: #0861F2;
     }
 `;
 
