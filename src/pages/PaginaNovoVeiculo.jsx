@@ -2,17 +2,18 @@ import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-import { getAnos, getMarcas, getModelos } from "../service/ApiFIPE";
 import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
 import { useEffect, useState } from "react";
 import { Form } from "../components/form/Form.style";
 
+import apiFipe from "../service/ApiFIPE";
+
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import Input from "../components/form/Input";
-import Label from "../components/form/Label";
-import BotaoEnviar from "../components/BotaoEnviar";
+import Label from "../components/Label/Label";
+import BotaoEnviar from "../components/Button/BotaoEnviar";
 import {
     Modal,
     ModalBackground,
@@ -78,7 +79,6 @@ const PaginaNovoVeiculo = () => {
     const [status, setStatus] = useState("Permitido");
 
     const [isOpen, setIsOpen] = useState(false);
-    const [isCode200, setIsCode200] = useState(false);
 
     const objeto = {
         tipo: tipoTexto,
@@ -94,7 +94,8 @@ const PaginaNovoVeiculo = () => {
 
     useEffect(() => {
         setCarregandoMarcas(true);
-        getMarcas(tipo)
+        apiFipe
+            .getMarcas(tipo)
             .then(setTodasAsMarcas)
             .catch(() => setTodasAsMarcas([]))
             .finally(() => setCarregandoMarcas(false));
@@ -103,7 +104,8 @@ const PaginaNovoVeiculo = () => {
     useEffect(() => {
         if (!marca) return;
         setCarregandoModelos(true);
-        getModelos(tipo, marca)
+        apiFipe
+            .getModelos(tipo, marca)
             .then(setTodosOsModelos)
             .catch(() => setTodosOsModelos([]))
             .finally(() => setCarregandoModelos(false));
@@ -112,7 +114,8 @@ const PaginaNovoVeiculo = () => {
     useEffect(() => {
         if (!modelo) return;
         setCarregandoAnos(true);
-        getAnos(tipo, marca, modelo)
+        apiFipe
+            .getAnos(tipo, marca, modelo)
             .then(setTodosOsAnos)
             .catch(() => setTodosOsAnos([]))
             .finally(() => setCarregandoAnos(false));

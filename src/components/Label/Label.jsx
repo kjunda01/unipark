@@ -4,7 +4,7 @@ const CustomLabel = styled.label`
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: white;
+    color: ${({ theme }) => theme.colors.azulEscuro};
 `;
 
 const Label = ({ ...rest }) => {

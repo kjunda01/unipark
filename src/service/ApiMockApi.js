@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const URL_MOCKAPI_VEICULOS =
-    "https://6741e396e4647499008f23d9.mockapi.io/api/veiculos";
+    "https://6727abed270bd0b9755344ee.mockapi.io/api/veiculos";
 
 const URL_MOCKAPI_ULTIMO_VEICULO =
     "https://6741e396e4647499008f23d9.mockapi.io/api/ultimoVeiculo";

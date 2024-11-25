@@ -125,8 +125,13 @@ export const Modal = styled.div`
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 300px;
-    text-align: center;
+    width: 60vw;
+    text-align: left;
+    
+    h2{
+        text-align: center;
+    }
+
 `;
 
 export const ModalSendButton = styled.button`
