@@ -5,15 +5,68 @@ import { Modal, ModalBackground, ModalSair } from "../components/Modal";
 import Input from "../components/form/Input";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BotaoEnviar from "../components/Button/BotaoEnviar";
-import BotaoCancelar from "../components/Button/BotaoCancelar";
 import Label from "../components/Label/Label";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
+import { Wrapper } from "../components/layout/Wrapper.style";
+import { Container } from "../components/layout/Container.style";
+import StyledButton from "../components/Button/StyledButton";
 
 const Div = styled.div`
     margin-bottom: 1rem;
+`;
+
+const FormContainer = styled.div`
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+`;
+
+// Estilos para os campos de entrada
+const StyledInput = styled(Input)`
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+`;
+
+const StyledSelect = styled.select`
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #f1f1f1;
+        cursor: not-allowed;
+    }
 `;
 
 const PaginaNovoVeiculo = () => {
@@ -154,231 +207,271 @@ const PaginaNovoVeiculo = () => {
                     irAteAPaginaConsulta("/buscarveiculo");
                 }
             } catch (error) {
-                
                 toast.error("Erro ao enviar os dados", error);
             }
         } else {
             toast.error("Todos os campos são obrigatórios.");
-            
         }
     };
 
     return (
-        <>
-            <form onSubmit={(e) => e.preventDefault()}>
-                {/* Seleção de Tipo */}
-                <select
-                    onChange={(event) => {
-                        setTipo(event.target.value);
-                        atualizarVeiculo("tipo", event, setVeiculo);
-                    }}
-                    value={tipo}
-                >
-                    <option value="">Selecione o tipo...</option>
-                    <option value="1">Carro</option>
-                    <option value="2">Moto</option>
-                    <option value="3">Caminhão</option>
-                </select>
-
-                {/* Seleção de Marca */}
-                <select
-                    onChange={(event) => {
-                        setMarcaSelecionada(event.target.value);
-                        atualizarVeiculo("marca", event, setVeiculo);
-                    }}
-                    value={marcaSelecionada}
-                    disabled={!tipo || carregando}
-                >
-                    <option value="">Selecione a marca...</option>
-                    {carregando ? (
-                        <option>Carregando...</option>
-                    ) : marcas.length > 0 ? (
-                        marcas.map((marca) => (
-                            <option key={marca.Value} value={marca.Value}>
-                                {marca.Label.toUpperCase()}
-                            </option>
-                        ))
-                    ) : (
-                        <option>Indisponível</option>
-                    )}
-                </select>
-
-                {/* Seleção de Modelo */}
-                <select
-                    onChange={(event) => {
-                        setModeloSelecionado(event.target.value);
-                        atualizarVeiculo("modelo", event, setVeiculo);
-                    }}
-                    value={modeloSelecionado}
-                    disabled={!marcaSelecionada || carregando}
-                >
-                    <option value="">Selecione o modelo...</option>
-                    {carregando ? (
-                        <option>Carregando...</option>
-                    ) : modelos.length > 0 ? (
-                        modelos.map((modelo) => (
-                            <option key={modelo.Value} value={modelo.Value}>
-                                {modelo.Label.toUpperCase()}
-                            </option>
-                        ))
-                    ) : (
-                        <option>Indisponível</option>
-                    )}
-                </select>
-
-                {/* Seleção de Ano */}
-                <select
-                    onChange={(event) => {
-                        setAnoSelecionado(event.target.value);
-                        atualizarVeiculo("ano", event, setVeiculo);
-                    }}
-                    value={anoSelecionado}
-                    disabled={!modeloSelecionado || carregando}
-                >
-                    <option value="">Selecione o ano...</option>
-                    {carregando ? (
-                        <option>Carregando...</option>
-                    ) : anos.length > 0 ? (
-                        anos.map((ano) => (
-                            <option key={ano.Value} value={ano.Value}>
-                                {ano.Label.toUpperCase()}
-                            </option>
-                        ))
-                    ) : (
-                        <option>Indisponível</option>
-                    )}
-                </select>
+        <Wrapper>
+            <Header />
+            <Container>
                 <Div>
-                    <Label>Placa</Label>
-                    <Input
-                        type="text"
-                        placeholder="Informe a placa do veículo"
-                        onChange={(event) => {
-                            setPlaca(event.target.value);
-                            veiculo["placa"] = event.target.value;
-                        }}
-                    />
-                </Div>
-                <Div>
-                    <Label>Cor</Label>
-                    <Input
-                        type="text"
-                        placeholder="Informe a cor do veículo"
-                        onChange={(event) => {
-                            setCor(event.target.value);
-                            veiculo["cor"] = event.target.value;
-                        }}
-                    />
-                </Div>
+                    <FormContainer>
+                        <StyledForm onSubmit={(e) => e.preventDefault()}>
+                            {/* Seleção de Tipo */}
+                            <StyledSelect
+                                onChange={(event) => {
+                                    setTipo(event.target.value);
+                                    atualizarVeiculo("tipo", event, setVeiculo);
+                                }}
+                                value={tipo}
+                            >
+                                <option value="">Selecione o tipo...</option>
+                                <option value="1">Carro</option>
+                                <option value="2">Moto</option>
+                                <option value="3">Caminhão</option>
+                            </StyledSelect>
 
-                <Div>
-                    <Label>Proprietário</Label>
-                    <Input
-                        type="text"
-                        placeholder="Informe o proprietário(a) do veículo"
-                        onChange={(event) => {
-                            setProprietario(event.target.value);
-                            veiculo["proprietario"] = event.target.value;
-                        }}
-                    />
-                </Div>
+                            {/* Seleção de Marca */}
+                            <StyledSelect
+                                onChange={(event) => {
+                                    setMarcaSelecionada(event.target.value);
+                                    atualizarVeiculo(
+                                        "marca",
+                                        event,
+                                        setVeiculo
+                                    );
+                                }}
+                                value={marcaSelecionada}
+                                disabled={!tipo || carregando}
+                            >
+                                <option value="">Selecione a marca...</option>
+                                {carregando ? (
+                                    <option>Carregando...</option>
+                                ) : marcas.length > 0 ? (
+                                    marcas.map((marca) => (
+                                        <option
+                                            key={marca.Value}
+                                            value={marca.Value}
+                                        >
+                                            {marca.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Indisponível</option>
+                                )}
+                            </StyledSelect>
 
-                <Div>
-                    <Label>Matrícula</Label>
-                    <Input
-                        type="text"
-                        placeholder="Informe a matrícula do proprietário(a)"
-                        onChange={(event) => {
-                            setMatricula(event.target.value);
-                            veiculo["matricula"] = event.target.value;
-                        }}
-                    />
-                </Div>
+                            {/* Seleção de Modelo */}
+                            <StyledSelect
+                                onChange={(event) => {
+                                    setModeloSelecionado(event.target.value);
+                                    atualizarVeiculo(
+                                        "modelo",
+                                        event,
+                                        setVeiculo
+                                    );
+                                }}
+                                value={modeloSelecionado}
+                                disabled={!marcaSelecionada || carregando}
+                            >
+                                <option value="">Selecione o modelo...</option>
+                                {carregando ? (
+                                    <option>Carregando...</option>
+                                ) : modelos.length > 0 ? (
+                                    modelos.map((modelo) => (
+                                        <option
+                                            key={modelo.Value}
+                                            value={modelo.Value}
+                                        >
+                                            {modelo.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Indisponível</option>
+                                )}
+                            </StyledSelect>
 
-                <Div>
-                    <Label>Status</Label>
-                    <select
-                        value={status}
-                        onChange={(event) => {
-                            function paraBooleano(str) {
-                                return str === "true";
-                            }
+                            {/* Seleção de Ano */}
+                            <StyledSelect
+                                onChange={(event) => {
+                                    setAnoSelecionado(event.target.value);
+                                    atualizarVeiculo("ano", event, setVeiculo);
+                                }}
+                                value={anoSelecionado}
+                                disabled={!modeloSelecionado || carregando}
+                            >
+                                <option value="">Selecione o ano...</option>
+                                {carregando ? (
+                                    <option>Carregando...</option>
+                                ) : anos.length > 0 ? (
+                                    anos.map((ano) => (
+                                        <option
+                                            key={ano.Value}
+                                            value={ano.Value}
+                                        >
+                                            {ano.Label.toUpperCase()}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>Indisponível</option>
+                                )}
+                            </StyledSelect>
+                            <Div>
+                                <Label>Placa</Label>
+                                <StyledInput
+                                    type="text"
+                                    placeholder="Informe a placa do veículo"
+                                    onChange={(event) => {
+                                        setPlaca(event.target.value);
+                                        veiculo["placa"] = event.target.value;
+                                    }}
+                                />
+                            </Div>
+                            <Div>
+                                <Label>Cor</Label>
+                                <StyledInput
+                                    type="text"
+                                    placeholder="Informe a cor do veículo"
+                                    onChange={(event) => {
+                                        setCor(event.target.value);
+                                        veiculo["cor"] = event.target.value;
+                                    }}
+                                />
+                            </Div>
 
-                            setStatus(event.target.value);
-                            
-                            veiculo["status"] = paraBooleano(event.target.value)
-                                ? "Permitido"
-                                : "Proibido";
-                        }}
-                    >
-                        <option value={""}>Selecione...</option>
-                        <option value={"true"}>Permitido</option>
-                        <option value={"false"}>Proibido</option>
-                    </select>
-                </Div>
+                            <Div>
+                                <Label>Proprietário</Label>
+                                <StyledInput
+                                    type="text"
+                                    placeholder="Informe o proprietário(a) do veículo"
+                                    onChange={(event) => {
+                                        setProprietario(event.target.value);
+                                        veiculo["proprietario"] =
+                                            event.target.value;
+                                    }}
+                                />
+                            </Div>
 
-                {/* Confirma os dados no modal com o botão de enviar */}
-                <BotaoEnviar type="submit" onClick={() => setIsOpen(!isOpen)}>
-                    Enviar
-                </BotaoEnviar>
+                            <Div>
+                                <Label>Matrícula</Label>
+                                <StyledInput
+                                    type="text"
+                                    placeholder="Informe a matrícula do proprietário(a)"
+                                    onChange={(event) => {
+                                        setMatricula(event.target.value);
+                                        veiculo["matricula"] =
+                                            event.target.value;
+                                    }}
+                                />
+                            </Div>
 
-                {isOpen && (
-                    <ModalBackground>
-                        <Modal>
-                            <ModalSair onClick={handleCancel}>X</ModalSair>
-                            <h2>Confirmar Dados</h2>
                             <Div>
-                                <strong>Tipo: </strong>
-                                {veiculo.tipo}
-                            </Div>
-                            <Div>
-                                <strong>Marca: </strong>
-                                {veiculo.marca}
-                            </Div>
-                            <Div>
-                                <strong>Modelo: </strong>
-                                {veiculo.modelo}
-                            </Div>
-                            <Div>
-                                <strong>Ano: </strong>
-                                {veiculo.ano}
-                            </Div>
-                            <Div>
-                                <strong>Placa: </strong>
-                                {veiculo.placa}
-                            </Div>
-                            <Div>
-                                <strong>Cor: </strong>
-                                {veiculo.cor}
-                            </Div>
-                            <Div>
-                                <strong>Proprietário: </strong>
-                                {veiculo.proprietario}
-                            </Div>
-                            <Div>
-                                <strong>Matricula: </strong>
-                                {veiculo.matricula}
-                            </Div>
-                            <Div>
-                                <strong>Status: </strong>
-                                {veiculo.status}
-                            </Div>
-                            <Div>
-                                <BotaoEnviar
-                                    onClick={() => handleSubmit(veiculo)}
+                                <Label>Status</Label>
+                                <select
+                                    value={status}
+                                    onChange={(event) => {
+                                        function paraBooleano(str) {
+                                            return str === "true";
+                                        }
+
+                                        setStatus(event.target.value);
+
+                                        veiculo["status"] = paraBooleano(
+                                            event.target.value
+                                        )
+                                            ? "Permitido"
+                                            : "Proibido";
+                                    }}
                                 >
-                                    Confirmar
-                                </BotaoEnviar>
-                                <BotaoCancelar onClick={handleCancel}>
-                                    Cancelar
-                                </BotaoCancelar>
+                                    <option value={""}>Selecione...</option>
+                                    <option value={"true"}>Permitido</option>
+                                    <option value={"false"}>Proibido</option>
+                                </select>
                             </Div>
-                        </Modal>
-                    </ModalBackground>
-                )}
-            </form>
-            <ToastContainer autoClose={3000} position="bottom-left" />
-        </>
+
+                            {/* Confirma os dados no modal com o botão de enviar */}
+                            <StyledButton
+                                type="submit"
+                                onClick={() => setIsOpen(!isOpen)}
+                            >
+                                Enviar
+                            </StyledButton>
+
+                            {isOpen && (
+                                <ModalBackground>
+                                    <Modal>
+                                        <ModalSair onClick={handleCancel}>
+                                            X
+                                        </ModalSair>
+                                        <h2>Confirmar Dados</h2>
+                                        <Div>
+                                            <strong>Tipo: </strong>
+                                            {veiculo.tipo}
+                                        </Div>
+                                        <Div>
+                                            <strong>Marca: </strong>
+                                            {veiculo.marca}
+                                        </Div>
+                                        <Div>
+                                            <strong>Modelo: </strong>
+                                            {veiculo.modelo}
+                                        </Div>
+                                        <Div>
+                                            <strong>Ano: </strong>
+                                            {veiculo.ano}
+                                        </Div>
+                                        <Div>
+                                            <strong>Placa: </strong>
+                                            {veiculo.placa}
+                                        </Div>
+                                        <Div>
+                                            <strong>Cor: </strong>
+                                            {veiculo.cor}
+                                        </Div>
+                                        <Div>
+                                            <strong>Proprietário: </strong>
+                                            {veiculo.proprietario}
+                                        </Div>
+                                        <Div>
+                                            <strong>Matricula: </strong>
+                                            {veiculo.matricula}
+                                        </Div>
+                                        <Div>
+                                            <strong>Status: </strong>
+                                            {veiculo.status}
+                                        </Div>
+                                        <Div>
+                                            <StyledButton
+                                                onClick={() =>
+                                                    handleSubmit(veiculo)
+                                                }
+                                            >
+                                                Confirmar
+                                            </StyledButton>
+                                            <StyledButton
+                                                backgroundColor={"cancel"}
+                                                onClick={handleCancel}
+                                            >
+                                                Cancelar
+                                            </StyledButton>
+                                        </Div>
+                                    </Modal>
+                                </ModalBackground>
+                            )}
+                        </StyledForm>
+                        <ToastContainer
+                            autoClose={3000}
+                            position="bottom-left"
+                        />
+                    </FormContainer>
+                </Div>
+            </Container>
+            <Footer />
+        </Wrapper>
     );
 };
 
