@@ -9,11 +9,52 @@ const URL_MOCKAPI_ULTIMO_VEICULO =
 const MOCKAPI = {
     async getVeiculos() {
         try {
-            const response = await axios.get(URL_MOCKAPI_VEICULOS); // Aguarda a resposta da API
-            return response.data; // Retorna os dados
+            const response = await axios.get(URL_MOCKAPI_VEICULOS);
+            return response.data;
         } catch (error) {
             console.error("Erro ao carregar veículos:", error);
-            throw error; // Lança o erro para que você possa tratá-lo onde for necessário
+            throw error;
+        }
+    },
+
+    async getVeiculoUnico(id) {
+        try {
+            const response = await axios.get(URL_MOCKAPI_VEICULOS + `/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao carregar veículo:", error);
+            throw error;
+        }
+    },
+
+    async deleteVeiculo(id) {
+        try {
+            const response = await axios.delete(
+                URL_MOCKAPI_VEICULOS + `/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao deletar veículo:", error);
+            throw error;
+        }
+    },
+
+    async putVeiculo(id) {
+        try {
+            const response = await axios.put(URL_MOCKAPI_VEICULOS + `/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao atualizar veículo:", error);
+            throw error;
+        }
+    },
+
+    async postVeiculo(objeto) {
+        try {
+            const response = await axios.post(URL_MOCKAPI_VEICULOS, objeto);
+            return response.data;
+        } catch (error) {
+            console.error(error);
         }
     },
 
@@ -22,13 +63,53 @@ const MOCKAPI = {
             const response = await axios.get(URL_MOCKAPI_ULTIMO_VEICULO);
             return response.data;
         } catch (error) {
-            console.error(error);
+            console.error("Erro ao carregar veículos:", error);
+            throw error;
         }
     },
 
-    async postVeiculo(objeto) {
+    async getUltimoVeiculoUnico(id) {
         try {
-            const response = await axios.post(URL_MOCKAPI_VEICULOS, objeto);
+            const response = await axios.get(
+                URL_MOCKAPI_ULTIMO_VEICULO + `/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao obter veículo:", error);
+            throw error;
+        }
+    },
+
+    async deleteUltimoVeiculo(id) {
+        try {
+            const response = await axios.delete(
+                URL_MOCKAPI_VEICULOS + `/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao deletar veículo:", error);
+            throw error;
+        }
+    },
+
+    async putUltimoVeiculo(id) {
+        try {
+            const response = await axios.put(
+                URL_MOCKAPI_ULTIMO_VEICULO + `/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao atualizar veículo:", error);
+            throw error;
+        }
+    },
+
+    async postUltimoVeiculo(objeto) {
+        try {
+            const response = await axios.post(
+                URL_MOCKAPI_ULTIMO_VEICULO,
+                objeto
+            );
             return response.data;
         } catch (error) {
             console.error(error);

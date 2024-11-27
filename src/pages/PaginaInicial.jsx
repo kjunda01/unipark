@@ -5,6 +5,7 @@ import Header from "../components/layout/Header";
 
 import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
+import MOCKAPI from "../service/ApiMockApi";
 
 const Span = styled.span`
     background-color: ${({ theme }) => theme.colors.amarelo};
