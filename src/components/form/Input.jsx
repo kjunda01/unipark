@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const CustomInput = styled.input`
+const Input = styled.input`
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
@@ -15,9 +15,4 @@ const CustomInput = styled.input`
     }
 `;
 
-const Input = ({ ...rest }) => {
-    return <CustomInput {...rest} />;
-};
-
 export default Input;
-

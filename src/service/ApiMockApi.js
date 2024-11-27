@@ -39,9 +39,12 @@ const MOCKAPI = {
         }
     },
 
-    async putVeiculo(id) {
+    async putVeiculo(id, objeto) {
         try {
-            const response = await axios.put(URL_MOCKAPI_VEICULOS + `/${id}`);
+            const response = await axios.put(
+                `${URL_MOCKAPI_VEICULOS}/${id}`,
+                objeto
+            );
             return response.data;
         } catch (error) {
             console.error("Erro ao atualizar veículo:", error);
@@ -92,11 +95,13 @@ const MOCKAPI = {
         }
     },
 
-    async putUltimoVeiculo(id) {
+    async putUltimoVeiculo(id, objeto) {
         try {
             const response = await axios.put(
-                URL_MOCKAPI_ULTIMO_VEICULO + `/${id}`
+                `${URL_MOCKAPI_ULTIMO_VEICULO}/${id}`,
+                objeto
             );
+
             return response.data;
         } catch (error) {
             console.error("Erro ao atualizar veículo:", error);

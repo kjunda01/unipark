@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { FaEdit, FaTrash } from "react-icons/fa"; // Importando ícones
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import MOCKAPI from "../service/ApiMockApi";
 
-// Estrutura base do layout
+import { Modal, ModalSair, ModalBackground } from "../components/Modal";
+import StyledButton from "../components/Button/StyledButton";
+import FormContainer from "../components/form/FormContainer";
+
+import StyledForm from "../components/form/StyledForm";
+import StyledSelect from "../components/Select/StyledSelect";
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -95,6 +102,36 @@ const StatusBadge = styled.span`
             : "gray"};
 `;
 
+const Actions = styled.div`
+    display: flex;
+    gap: 10px;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &.edit {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        &.delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+`;
+
 const PaginationControls = styled.div`
     display: flex;
     justify-content: center;
@@ -116,19 +153,19 @@ const PaginationControls = styled.div`
     }
 `;
 
-// Componente principal
 const PaginaConsulta = () => {
     const [veiculos, setVeiculos] = useState([]);
     const [termoBuscado, setTermoBuscado] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12; // Exibindo mais itens por página
+    const [isOpen, setIsOpen] = useState(false);
+    const [veiculoAtual, setVeiculoAtual] = useState("");
+    const itemsPerPage = 12;
 
-    // Fetch da API
     useEffect(() => {
         const obterVeiculos = async () => {
             try {
                 const data = await MOCKAPI.getVeiculos();
-                setVeiculos(data); // Supondo que a API retorna uma lista de objetos
+                setVeiculos(data);
             } catch (error) {
                 console.error("Erro ao carregar veículos:", error);
             }
@@ -136,14 +173,51 @@ const PaginaConsulta = () => {
         obterVeiculos();
     }, []);
 
-    // Filtrando veículos com base no termo de busca
+    const deletarVeiculo = async (id) => {
+        if (window.confirm("Tem certeza que deseja deletar este veículo?")) {
+            try {
+                await MOCKAPI.deleteVeiculo(id);
+                setVeiculos((prev) =>
+                    prev.filter((veiculo) => veiculo.id !== id)
+                );
+            } catch (error) {
+                console.error("Erro ao deletar veículo:", error);
+            }
+        }
+    };
+
+    const handleCancel = () => setIsOpen(!open);
+
+    const handleSubmit = async (veiculoID, objeto) => {
+        const dadosAtualizados = {
+            tipo: objeto.tipo,
+            marca: objeto.marca,
+            modelo: objeto.modelo,
+            ano: objeto.ano,
+            placa: objeto.placa,
+            cor: objeto.cor,
+            proprietario: objeto.proprietario,
+            matricula: objeto.matricula,
+            status: objeto.status,
+        };
+
+        try {
+            const veiculoAtualizado = await MOCKAPI.putVeiculo(
+                veiculoID,
+                dadosAtualizados
+            );
+            console.log("Veículo atualizado com sucesso:", veiculoAtualizado);
+        } catch (error) {
+            console.error("Erro ao atualizar veículo:", error);
+        }
+    };
+
     const filteredVeiculos = veiculos.filter((veiculo) =>
         `${veiculo.placa} ${veiculo.tipo} ${veiculo.marca} ${veiculo.modelo}`
             .toLowerCase()
             .includes(termoBuscado.toLowerCase())
     );
 
-    // Paginação
     const paginatedVeiculos = filteredVeiculos.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
@@ -170,24 +244,31 @@ const PaginaConsulta = () => {
                     <Table>
                         <thead>
                             <tr>
-                                <th>Placa</th>
+                                <th>ID</th>
                                 <th>Tipo</th>
                                 <th>Marca</th>
                                 <th>Modelo</th>
                                 <th>Ano</th>
+                                <th>Placa</th>
                                 <th>Cor</th>
+                                <th>Proprietário</th>
+                                <th>Matrícula</th>
                                 <th>Status</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedVeiculos.map((veiculo) => (
                                 <tr key={veiculo.id}>
-                                    <td>{veiculo.placa}</td>
+                                    <td>{veiculo.id}</td>
                                     <td>{veiculo.tipo}</td>
                                     <td>{veiculo.marca}</td>
                                     <td>{veiculo.modelo}</td>
                                     <td>{veiculo.ano}</td>
+                                    <td>{veiculo.placa}</td>
                                     <td>{veiculo.cor}</td>
+                                    <td>{veiculo.proprietario}</td>
+                                    <td>{veiculo.matricula}</td>
                                     <td>
                                         <StatusBadge
                                             status={
@@ -200,6 +281,550 @@ const PaginaConsulta = () => {
                                                 ? veiculo.status.toUpperCase()
                                                 : "INDEFINIDO"}
                                         </StatusBadge>
+                                    </td>
+                                    <td>
+                                        <Actions>
+                                            <button
+                                                className="edit"
+                                                onClick={() => {
+                                                    setIsOpen(!isOpen);
+                                                    setVeiculoAtual(veiculo.id);
+                                                }}
+                                            >
+                                                <FaEdit />
+                                            </button>
+
+                                            {isOpen && (
+                                                <ModalBackground>
+                                                    <Modal>
+                                                        <ModalSair
+                                                            onClick={
+                                                                handleCancel
+                                                            }
+                                                        >
+                                                            X
+                                                        </ModalSair>
+                                                        <FormContainer>
+                                                            <StyledForm
+                                                                onSubmit={(e) =>
+                                                                    e.preventDefault()
+                                                                }
+                                                            >
+                                                                {/* Seleção de Tipo */}
+                                                                <StyledSelect
+                                                                    onChange={(
+                                                                        event
+                                                                    ) => {
+                                                                        setTipo(
+                                                                            event
+                                                                                .target
+                                                                                .value
+                                                                        );
+                                                                        atualizarVeiculo(
+                                                                            "tipo",
+                                                                            event,
+                                                                            setVeiculo
+                                                                        );
+                                                                    }}
+                                                                    value={tipo}
+                                                                >
+                                                                    <option value="">
+                                                                        Selecione
+                                                                        o
+                                                                        tipo...
+                                                                    </option>
+                                                                    <option value="1">
+                                                                        Carro
+                                                                    </option>
+                                                                    <option value="2">
+                                                                        Moto
+                                                                    </option>
+                                                                    <option value="3">
+                                                                        Caminhão
+                                                                    </option>
+                                                                </StyledSelect>
+
+                                                                {/* Seleção de Marca */}
+                                                                <StyledSelect
+                                                                    onChange={(
+                                                                        event
+                                                                    ) => {
+                                                                        setMarcaSelecionada(
+                                                                            event
+                                                                                .target
+                                                                                .value
+                                                                        );
+                                                                        atualizarVeiculo(
+                                                                            "marca",
+                                                                            event,
+                                                                            setVeiculo
+                                                                        );
+                                                                    }}
+                                                                    value={
+                                                                        marcaSelecionada
+                                                                    }
+                                                                    disabled={
+                                                                        !tipo ||
+                                                                        carregando
+                                                                    }
+                                                                >
+                                                                    <option value="">
+                                                                        Selecione
+                                                                        a
+                                                                        marca...
+                                                                    </option>
+                                                                    {carregando ? (
+                                                                        <option>
+                                                                            Carregando...
+                                                                        </option>
+                                                                    ) : marcas.length >
+                                                                      0 ? (
+                                                                        marcas.map(
+                                                                            (
+                                                                                marca
+                                                                            ) => (
+                                                                                <option
+                                                                                    key={
+                                                                                        marca.Value
+                                                                                    }
+                                                                                    value={
+                                                                                        marca.Value
+                                                                                    }
+                                                                                >
+                                                                                    {marca.Label.toUpperCase()}
+                                                                                </option>
+                                                                            )
+                                                                        )
+                                                                    ) : (
+                                                                        <option>
+                                                                            Indisponível
+                                                                        </option>
+                                                                    )}
+                                                                </StyledSelect>
+
+                                                                {/* Seleção de Modelo */}
+                                                                <StyledSelect
+                                                                    onChange={(
+                                                                        event
+                                                                    ) => {
+                                                                        setModeloSelecionado(
+                                                                            event
+                                                                                .target
+                                                                                .value
+                                                                        );
+                                                                        atualizarVeiculo(
+                                                                            "modelo",
+                                                                            event,
+                                                                            setVeiculo
+                                                                        );
+                                                                    }}
+                                                                    value={
+                                                                        modeloSelecionado
+                                                                    }
+                                                                    disabled={
+                                                                        !marcaSelecionada ||
+                                                                        carregando
+                                                                    }
+                                                                >
+                                                                    <option value="">
+                                                                        Selecione
+                                                                        o
+                                                                        modelo...
+                                                                    </option>
+                                                                    {carregando ? (
+                                                                        <option>
+                                                                            Carregando...
+                                                                        </option>
+                                                                    ) : modelos.length >
+                                                                      0 ? (
+                                                                        modelos.map(
+                                                                            (
+                                                                                modelo
+                                                                            ) => (
+                                                                                <option
+                                                                                    key={
+                                                                                        modelo.Value
+                                                                                    }
+                                                                                    value={
+                                                                                        modelo.Value
+                                                                                    }
+                                                                                >
+                                                                                    {modelo.Label.toUpperCase()}
+                                                                                </option>
+                                                                            )
+                                                                        )
+                                                                    ) : (
+                                                                        <option>
+                                                                            Indisponível
+                                                                        </option>
+                                                                    )}
+                                                                </StyledSelect>
+
+                                                                {/* Seleção de Ano */}
+                                                                <StyledSelect
+                                                                    onChange={(
+                                                                        event
+                                                                    ) => {
+                                                                        setAnoSelecionado(
+                                                                            event
+                                                                                .target
+                                                                                .value
+                                                                        );
+                                                                        atualizarVeiculo(
+                                                                            "ano",
+                                                                            event,
+                                                                            setVeiculo
+                                                                        );
+                                                                    }}
+                                                                    value={
+                                                                        anoSelecionado
+                                                                    }
+                                                                    disabled={
+                                                                        !modeloSelecionado ||
+                                                                        carregando
+                                                                    }
+                                                                >
+                                                                    <option value="">
+                                                                        Selecione
+                                                                        o ano...
+                                                                    </option>
+                                                                    {carregando ? (
+                                                                        <option>
+                                                                            Carregando...
+                                                                        </option>
+                                                                    ) : anos.length >
+                                                                      0 ? (
+                                                                        anos.map(
+                                                                            (
+                                                                                ano
+                                                                            ) => (
+                                                                                <option
+                                                                                    key={
+                                                                                        ano.Value
+                                                                                    }
+                                                                                    value={
+                                                                                        ano.Value
+                                                                                    }
+                                                                                >
+                                                                                    {ano.Label.toUpperCase()}
+                                                                                </option>
+                                                                            )
+                                                                        )
+                                                                    ) : (
+                                                                        <option>
+                                                                            Indisponível
+                                                                        </option>
+                                                                    )}
+                                                                </StyledSelect>
+                                                                <div>
+                                                                    <Label>
+                                                                        Placa
+                                                                    </Label>
+                                                                    <StyledInput
+                                                                        type="text"
+                                                                        placeholder="Informe a placa do veículo"
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            setPlaca(
+                                                                                event
+                                                                                    .target
+                                                                                    .value
+                                                                            );
+                                                                            veiculo[
+                                                                                "placa"
+                                                                            ] =
+                                                                                event.target.value;
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label>
+                                                                        Cor
+                                                                    </Label>
+                                                                    <StyledInput
+                                                                        type="text"
+                                                                        placeholder="Informe a cor do veículo"
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            setCor(
+                                                                                event
+                                                                                    .target
+                                                                                    .value
+                                                                            );
+                                                                            veiculo[
+                                                                                "cor"
+                                                                            ] =
+                                                                                event.target.value;
+                                                                        }}
+                                                                    />
+                                                                </div>
+
+                                                                <div>
+                                                                    <Label>
+                                                                        Proprietário
+                                                                    </Label>
+                                                                    <StyledInput
+                                                                        type="text"
+                                                                        placeholder="Informe o proprietário(a) do veículo"
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            setProprietario(
+                                                                                event
+                                                                                    .target
+                                                                                    .value
+                                                                            );
+                                                                            veiculo[
+                                                                                "proprietario"
+                                                                            ] =
+                                                                                event.target.value;
+                                                                        }}
+                                                                    />
+                                                                </div>
+
+                                                                <div>
+                                                                    <Label>
+                                                                        Matrícula
+                                                                    </Label>
+                                                                    <StyledInput
+                                                                        type="text"
+                                                                        placeholder="Informe a matrícula do proprietário(a)"
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            setMatricula(
+                                                                                event
+                                                                                    .target
+                                                                                    .value
+                                                                            );
+                                                                            veiculo[
+                                                                                "matricula"
+                                                                            ] =
+                                                                                event.target.value;
+                                                                        }}
+                                                                    />
+                                                                </div>
+
+                                                                <div>
+                                                                    <Label>
+                                                                        Status
+                                                                    </Label>
+                                                                    <StyledSelect
+                                                                        value={
+                                                                            status
+                                                                        }
+                                                                        onChange={(
+                                                                            event
+                                                                        ) => {
+                                                                            function paraBooleano(
+                                                                                str
+                                                                            ) {
+                                                                                return (
+                                                                                    str ===
+                                                                                    "true"
+                                                                                );
+                                                                            }
+
+                                                                            setStatus(
+                                                                                event
+                                                                                    .target
+                                                                                    .value
+                                                                            );
+
+                                                                            veiculo[
+                                                                                "status"
+                                                                            ] =
+                                                                                paraBooleano(
+                                                                                    event
+                                                                                        .target
+                                                                                        .value
+                                                                                )
+                                                                                    ? "Permitido"
+                                                                                    : "Proibido";
+                                                                        }}
+                                                                    >
+                                                                        <option
+                                                                            value={
+                                                                                ""
+                                                                            }
+                                                                        >
+                                                                            Selecione...
+                                                                        </option>
+                                                                        <option
+                                                                            value={
+                                                                                "true"
+                                                                            }
+                                                                        >
+                                                                            Permitido
+                                                                        </option>
+                                                                        <option
+                                                                            value={
+                                                                                "false"
+                                                                            }
+                                                                        >
+                                                                            Proibido
+                                                                        </option>
+                                                                    </StyledSelect>
+                                                                </div>
+
+                                                                {/* Confirma os dados no modal com o botão de enviar */}
+                                                                <StyledButton
+                                                                    type="submit"
+                                                                    onClick={() =>
+                                                                        setIsOpen(
+                                                                            !isOpen
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Enviar
+                                                                </StyledButton>
+
+                                                                {isOpen && (
+                                                                    <ModalBackground>
+                                                                        <Modal>
+                                                                            <ModalSair
+                                                                                onClick={
+                                                                                    handleCancel
+                                                                                }
+                                                                            >
+                                                                                X
+                                                                            </ModalSair>
+                                                                            <h2>
+                                                                                Confirmar
+                                                                                Dados
+                                                                            </h2>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Tipo:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.tipo
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Marca:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.marca
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Modelo:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.modelo
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Ano:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.ano
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Placa:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.placa
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Cor:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.cor
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Proprietário:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.proprietario
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Matricula:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.matricula
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <strong>
+                                                                                    Status:{" "}
+                                                                                </strong>
+                                                                                {
+                                                                                    veiculo.status
+                                                                                }
+                                                                            </Div>
+                                                                            <Div>
+                                                                                <StyledButton
+                                                                                    onClick={() =>
+                                                                                        handleSubmit(
+                                                                                            veiculo
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Confirmar
+                                                                                </StyledButton>
+                                                                                <StyledButton
+                                                                                    backgroundcolor={
+                                                                                        "cancel"
+                                                                                    }
+                                                                                    onClick={
+                                                                                        handleCancel
+                                                                                    }
+                                                                                >
+                                                                                    Cancelar
+                                                                                </StyledButton>
+                                                                            </Div>
+                                                                        </Modal>
+                                                                    </ModalBackground>
+                                                                )}
+                                                            </StyledForm>
+                                                        </FormContainer>
+                                                        <StyledButton
+                                                            onClick={() =>
+                                                                handleSubmit(
+                                                                    veiculo
+                                                                )
+                                                            }
+                                                        >
+                                                            Confirmar
+                                                        </StyledButton>
+                                                        <StyledButton
+                                                            backgroundcolor={
+                                                                "cancel"
+                                                            }
+                                                            onClick={
+                                                                handleCancel
+                                                            }
+                                                        >
+                                                            Cancelar
+                                                        </StyledButton>
+                                                    </Modal>
+                                                </ModalBackground>
+                                            )}
+
+                                            <button
+                                                className="delete"
+                                                onClick={() =>
+                                                    deletarVeiculo(veiculo.id)
+                                                }
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </Actions>
                                     </td>
                                 </tr>
                             ))}

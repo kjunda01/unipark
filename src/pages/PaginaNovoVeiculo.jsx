@@ -17,44 +17,18 @@ import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
 import StyledButton from "../components/Button/StyledButton";
 import StyledSelect from "../components/Select/StyledSelect";
+import FormContainer from "../components/form/FormContainer";
+import StyledForm from "../components/form/StyledForm";
 
 // 4. Serviços/APIs
 import ApiFIPE from "../service/ApiFIPE";
 import MOCKAPI from "../service/ApiMockApi";
+import StyledInput from "../components/form/StyledInput";
 
 const Div = styled.div`
     margin-bottom: 1rem;
     display: flex;
     justify-content: center;
-`;
-
-const FormContainer = styled.div`
-    min-width: 50vw;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const StyledForm = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-`;
-
-const StyledInput = styled(Input)`
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-
-    &:focus {
-        border-color: ${({ theme }) => theme.colors.azulEscuro};
-        outline: none;
-    }
 `;
 
 const PaginaNovoVeiculo = () => {
