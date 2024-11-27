@@ -138,7 +138,8 @@ const PaginaNovoVeiculo = () => {
             veiculo.placa &&
             veiculo.cor &&
             veiculo.proprietario &&
-            veiculo.matricula
+            veiculo.matricula &&
+            veiculo.status
         ) {
             try {
                 const response = await axios.post(
@@ -147,16 +148,18 @@ const PaginaNovoVeiculo = () => {
                 );
 
                 if (response.status !== 404) {
-                    irAteAPaginaConsulta("/buscarveiculo"); // Substitua com a URL desejada
+                    toast.success(
+                        `Veículo "${veiculo.placa}" adicionado com sucesso.`
+                    );
+                    irAteAPaginaConsulta("/buscarveiculo");
                 }
             } catch (error) {
-                console.log("Erro ao enviar os dados", error);
-                // ADICIONAR UM TOAST AQUI
+                
+                toast.error("Erro ao enviar os dados", error);
             }
         } else {
             toast.error("Todos os campos são obrigatórios.");
-
-            console.error("Todos os campos são obrigatórios.");
+            
         }
     };
 
@@ -302,12 +305,13 @@ const PaginaNovoVeiculo = () => {
                             }
 
                             setStatus(event.target.value);
+                            
                             veiculo["status"] = paraBooleano(event.target.value)
                                 ? "Permitido"
                                 : "Proibido";
                         }}
                     >
-                        <option>Selecione...</option>
+                        <option value={""}>Selecione...</option>
                         <option value={"true"}>Permitido</option>
                         <option value={"false"}>Proibido</option>
                     </select>

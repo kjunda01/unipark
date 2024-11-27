@@ -6,7 +6,7 @@ import PaginaInicial from "./pages/PaginaInicial";
 import PaginaConsulta from "./pages/PaginaConsulta";
 import PaginaNovoVeiculo from "./pages/PaginaNovoVeiculo";
 import PaginaAoVivo from "./pages/PaginaAoVivo";
-import PaginaTeste from "./pages/PaginaTeste";
+
 
 function App() {
     return (
@@ -24,10 +24,6 @@ function App() {
                         <Route
                             path="/cadastrarveiculo"
                             element={<PaginaNovoVeiculo />}
-                        />
-                        <Route
-                            path="/teste"
-                            element={<PaginaTeste />}
                         />
                     </Route>
                 </Routes>
