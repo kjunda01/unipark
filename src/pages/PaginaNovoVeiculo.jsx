@@ -1,453 +1,379 @@
-import axios from "axios";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-
-import { Wrapper } from "../components/layout/Wrapper.style";
-import { Container } from "../components/layout/Container.style";
 import { useEffect, useState } from "react";
-import { Form } from "../components/form/Form.style";
-
-import apiFipe from "../service/ApiFIPE";
-
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
+import ApiFIPE from "../service/ApiFIPE";
+import styled from "styled-components";
+import { Modal, ModalBackground, ModalSair } from "../components/Modal";
 import Input from "../components/form/Input";
-import Label from "../components/Label/Label";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import BotaoEnviar from "../components/Button/BotaoEnviar";
-import {
-    Modal,
-    ModalBackground,
-    ModalCancelButton,
-    ModalSair,
-    ModalSendButton,
-} from "../components/Modal";
+import BotaoCancelar from "../components/Button/BotaoCancelar";
+import Label from "../components/Label/Label";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Div = styled.div`
-    margin-bottom: 20px;
-`;
-
-const Row = styled.div`
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-`;
-
-const Column = styled.div`
-    flex: 1;
-    min-width: 250px;
-`;
-
-const Select = styled.select`
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.2s;
-
-    &:focus {
-        border-color: #007bff;
-    }
+    margin-bottom: 1rem;
 `;
 
 const PaginaNovoVeiculo = () => {
     const [tipo, setTipo] = useState("");
-    const [marca, setMarca] = useState("");
-    const [modelo, setModelo] = useState("");
-    const [ano, setAno] = useState("");
-
-    const [todasAsMarcas, setTodasAsMarcas] = useState([]);
-    const [todosOsModelos, setTodosOsModelos] = useState([]);
-    const [todosOsAnos, setTodosOsAnos] = useState([]);
-
-    const [carregandoMarcas, setCarregandoMarcas] = useState(true);
-    const [carregandoModelos, setCarregandoModelos] = useState(true);
-    const [carregandoAnos, setCarregandoAnos] = useState(true);
-
-    const [tipoTexto, setTipoTexto] = useState("");
-    const [marcaTexto, setMarcaTexto] = useState("");
-    const [modeloTexto, setModeloTexto] = useState("");
-    const [anoTexto, setAnoTexto] = useState("");
-
+    const [marcas, setMarcas] = useState([]);
+    const [modelos, setModelos] = useState([]);
+    const [anos, setAnos] = useState([]);
+    const [veiculo, setVeiculo] = useState({});
     const [placa, setPlaca] = useState("");
     const [cor, setCor] = useState("");
     const [proprietario, setProprietario] = useState("");
     const [matricula, setMatricula] = useState("");
-    const [status, setStatus] = useState("Permitido");
+    const [status, setStatus] = useState("");
+
+    const [marcaSelecionada, setMarcaSelecionada] = useState("");
+    const [modeloSelecionado, setModeloSelecionado] = useState("");
+    const [anoSelecionado, setAnoSelecionado] = useState("");
+
+    const [carregando, setCarregando] = useState(false);
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const objeto = {
-        tipo: tipoTexto,
-        marca: marcaTexto,
-        modelo: modeloTexto,
-        ano: anoTexto,
-        placa: placa,
-        cor: cor,
-        proprietario: proprietario,
-        matricula: matricula,
-        status: status,
-    };
-
+    // SE O TIPO MUDAR, ELE BUSCA AS MARCAS
     useEffect(() => {
-        setCarregandoMarcas(true);
-        apiFipe
-            .getMarcas(tipo)
-            .then(setTodasAsMarcas)
-            .catch(() => setTodasAsMarcas([]))
-            .finally(() => setCarregandoMarcas(false));
+        // LIMPA AS SELEÇÕES PARA TROCAR DE CAMINHÃO PARA CARRO, EXEMPLO
+        setMarcas([]);
+        setModelos([]);
+        setAnos([]);
+        setMarcaSelecionada("");
+        setModeloSelecionado("");
+        setAnoSelecionado("");
+
+        const obterMarcas = async () => {
+            if (tipo.length > 0) {
+                setCarregando(true);
+                try {
+                    const response = await ApiFIPE.getMarcas(tipo);
+                    setMarcas(response || []);
+                    setModelos([]);
+                    setAnos([]);
+                } catch (error) {
+                    console.error("Erro ao carregar marcas:", error);
+                    setMarcas([]);
+                } finally {
+                    setCarregando(false);
+                }
+            } else return;
+        };
+        obterMarcas();
     }, [tipo]);
 
+    // SE A MARCA MUDAR, ELE BUSCA OS MODELOS
     useEffect(() => {
-        if (!marca) return;
-        setCarregandoModelos(true);
-        apiFipe
-            .getModelos(tipo, marca)
-            .then(setTodosOsModelos)
-            .catch(() => setTodosOsModelos([]))
-            .finally(() => setCarregandoModelos(false));
-    }, [tipo, marca]);
+        const obterModelos = async () => {
+            if (marcaSelecionada.length > 0) {
+                setCarregando(true);
+                try {
+                    const response = await ApiFIPE.getModelos(
+                        tipo,
+                        marcaSelecionada
+                    );
+                    setModelos(response || []);
+                } catch (error) {
+                    console.error("Erro ao carregar modelos:", error);
+                    setModelos([]);
+                } finally {
+                    setCarregando(false);
+                }
+            } else return;
+        };
+        obterModelos();
+    }, [tipo, marcaSelecionada]);
 
+    //  SE O MODELO MUDAR ELE BUSCA OS ANOS
     useEffect(() => {
-        if (!modelo) return;
-        setCarregandoAnos(true);
-        apiFipe
-            .getAnos(tipo, marca, modelo)
-            .then(setTodosOsAnos)
-            .catch(() => setTodosOsAnos([]))
-            .finally(() => setCarregandoAnos(false));
-    }, [tipo, marca, modelo]);
+        const obterAnos = async () => {
+            if (modeloSelecionado.length > 0) {
+                setCarregando(true);
+                try {
+                    const response = await ApiFIPE.getAnos(
+                        tipo,
+                        marcaSelecionada,
+                        modeloSelecionado
+                    );
+                    setAnos(response || []);
+                } catch (error) {
+                    console.error("Erro ao carregar modelos:", error);
+                    setAnos([]);
+                } finally {
+                    setCarregando(false);
+                }
+            } else return;
+        };
+        obterAnos();
+    }, [tipo, marcaSelecionada, modeloSelecionado]);
 
-    const handleTextChange = (event) => {
-        const opcao = event.target.options[event.target.selectedIndex]; // Acessa a opção selecionada
-        const texto = opcao.textContent || opcao.innerText; // Pega o texto da opção
-        return texto;
+    // PEGA O TEXTO DO VALOR SELECIONADO PARA MANDAR PRO CADASTRO
+    const atualizarVeiculo = (chave, event, setVeiculo) => {
+        const textoSelecionado =
+            event.target.options[event.target.selectedIndex].text;
+
+        setVeiculo((valorAnterior) => ({
+            ...valorAnterior,
+            [chave]: textoSelecionado,
+        }));
     };
 
+    // FECHA O MODAL
+    const handleCancel = () => setIsOpen(false);
+
+    // NAVEGA PARA A PAGINA DE CONSULTA APÓS ENVIAR O FORMULARIO
     const irAteAPaginaConsulta = useNavigate();
 
+    // LIDA COM O ENVIO DOS DADOS
     const handleSubmit = async () => {
         setIsOpen(!isOpen);
         if (
-            tipoTexto &&
-            marcaTexto &&
-            modeloTexto &&
-            anoTexto &&
-            placa &&
-            cor &&
-            proprietario &&
-            matricula &&
-            status
+            veiculo.tipo &&
+            veiculo.marca &&
+            veiculo.modelo &&
+            veiculo.ano &&
+            veiculo.placa &&
+            veiculo.cor &&
+            veiculo.proprietario &&
+            veiculo.matricula
         ) {
             try {
                 const response = await axios.post(
-                    "https://6741e396e4647499008f23d9.mockapi.io/api/veiculos",
-                    objeto
+                    "https://6727abed270bd0b9755344ee.mockapi.io/api/veiculos",
+                    veiculo
                 );
 
-                // Caso o POST seja bem-sucedido, redirecionar para a página desejada
                 if (response.status !== 404) {
-                    // Verifique o código de status HTTP para garantir sucesso
                     irAteAPaginaConsulta("/buscarveiculo"); // Substitua com a URL desejada
                 }
             } catch (error) {
-                console.error("Erro ao enviar os dados", error);
-                // Aqui você pode adicionar um tratamento de erro, como um toast
+                console.log("Erro ao enviar os dados", error);
+                // ADICIONAR UM TOAST AQUI
             }
         } else {
+            toast.error("Todos os campos são obrigatórios.");
+
             console.error("Todos os campos são obrigatórios.");
-            // Adicione mensagem de erro ou validação aqui, se necessário
         }
-    };
-
-    const handleCancel = () => {
-        setIsOpen(!isOpen);
-    };
-
-    const redefinirEstadosDependentes = () => {
-        // Redefine os estados dependentes
-        setMarca("");
-        setModelo("");
-        setAno("");
-        setMarcaTexto("");
-        setModeloTexto("");
-        setAnoTexto("");
-
-        // Limpa as listas dependentes
-        setTodasAsMarcas([]);
-        setTodosOsModelos([]);
-        setTodosOsAnos([]);
     };
 
     return (
         <>
-            <Wrapper>
-                <Header />
-                <Container>
-                    <Form>
-                        <Row>
-                            <Column>
-                                <Label>Tipo do veículo</Label>
-                                <Select
-                                    required
-                                    value={tipo}
-                                    onChange={(event) => {
-                                        setTipo(event.target.value);
+            <form onSubmit={(e) => e.preventDefault()}>
+                {/* Seleção de Tipo */}
+                <select
+                    onChange={(event) => {
+                        setTipo(event.target.value);
+                        atualizarVeiculo("tipo", event, setVeiculo);
+                    }}
+                    value={tipo}
+                >
+                    <option value="">Selecione o tipo...</option>
+                    <option value="1">Carro</option>
+                    <option value="2">Moto</option>
+                    <option value="3">Caminhão</option>
+                </select>
 
-                                        switch (event.target.value) {
-                                            case "1":
-                                                setTipoTexto("Carro");
-                                                break;
-                                            case "2":
-                                                setTipoTexto("Moto");
-                                                break;
-                                            case "3":
-                                                setTipoTexto("Caminhão");
-                                        }
-                                        redefinirEstadosDependentes();
-                                    }}
-                                >
-                                    <option value="">
-                                        Selecione um tipo...
-                                    </option>
-                                    <option value={1}>Carro</option>
-                                    <option value={2}>Moto</option>
-                                    <option value={3}>Caminhão</option>
-                                </Select>
-                            </Column>
+                {/* Seleção de Marca */}
+                <select
+                    onChange={(event) => {
+                        setMarcaSelecionada(event.target.value);
+                        atualizarVeiculo("marca", event, setVeiculo);
+                    }}
+                    value={marcaSelecionada}
+                    disabled={!tipo || carregando}
+                >
+                    <option value="">Selecione a marca...</option>
+                    {carregando ? (
+                        <option>Carregando...</option>
+                    ) : marcas.length > 0 ? (
+                        marcas.map((marca) => (
+                            <option key={marca.Value} value={marca.Value}>
+                                {marca.Label.toUpperCase()}
+                            </option>
+                        ))
+                    ) : (
+                        <option>Indisponível</option>
+                    )}
+                </select>
 
-                            <Column>
-                                <Label>Marca</Label>
-                                <Select
-                                    value={marca}
-                                    onChange={(event) => {
-                                        setMarca(event.target.value);
-                                        setMarcaTexto(handleTextChange(event));
-                                    }}
-                                >
-                                    <option value="">
-                                        Selecione uma marca...
-                                    </option>
-                                    {carregandoMarcas ? (
-                                        <option>Carregando...</option>
-                                    ) : todasAsMarcas.length > 0 ? (
-                                        todasAsMarcas.map((marca) => (
-                                            <option
-                                                key={marca.Value}
-                                                value={marca.Value}
-                                            >
-                                                {marca.Label.toUpperCase()}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option>
-                                            Nenhum modelo disponível
-                                        </option>
-                                    )}
-                                </Select>
-                            </Column>
-                        </Row>
+                {/* Seleção de Modelo */}
+                <select
+                    onChange={(event) => {
+                        setModeloSelecionado(event.target.value);
+                        atualizarVeiculo("modelo", event, setVeiculo);
+                    }}
+                    value={modeloSelecionado}
+                    disabled={!marcaSelecionada || carregando}
+                >
+                    <option value="">Selecione o modelo...</option>
+                    {carregando ? (
+                        <option>Carregando...</option>
+                    ) : modelos.length > 0 ? (
+                        modelos.map((modelo) => (
+                            <option key={modelo.Value} value={modelo.Value}>
+                                {modelo.Label.toUpperCase()}
+                            </option>
+                        ))
+                    ) : (
+                        <option>Indisponível</option>
+                    )}
+                </select>
 
-                        <Row>
-                            <Column>
-                                <Label>Modelo</Label>
-                                <Select
-                                    required
-                                    value={modelo}
-                                    onChange={(event) => {
-                                        setModelo(event.target.value);
-                                        setModeloTexto(handleTextChange(event));
-                                    }}
-                                >
-                                    <option value="">
-                                        Selecione um modelo...
-                                    </option>
-                                    {carregandoModelos ? (
-                                        <option>Carregando...</option>
-                                    ) : todosOsModelos.length > 0 ? (
-                                        todosOsModelos.map((modelo) => (
-                                            <option
-                                                key={modelo.Value}
-                                                value={modelo.Value}
-                                            >
-                                                {modelo.Label.toUpperCase()}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option>
-                                            Nenhum modelo disponível
-                                        </option>
-                                    )}
-                                </Select>
-                            </Column>
+                {/* Seleção de Ano */}
+                <select
+                    onChange={(event) => {
+                        setAnoSelecionado(event.target.value);
+                        atualizarVeiculo("ano", event, setVeiculo);
+                    }}
+                    value={anoSelecionado}
+                    disabled={!modeloSelecionado || carregando}
+                >
+                    <option value="">Selecione o ano...</option>
+                    {carregando ? (
+                        <option>Carregando...</option>
+                    ) : anos.length > 0 ? (
+                        anos.map((ano) => (
+                            <option key={ano.Value} value={ano.Value}>
+                                {ano.Label.toUpperCase()}
+                            </option>
+                        ))
+                    ) : (
+                        <option>Indisponível</option>
+                    )}
+                </select>
+                <Div>
+                    <Label>Placa</Label>
+                    <Input
+                        type="text"
+                        placeholder="Informe a placa do veículo"
+                        onChange={(event) => {
+                            setPlaca(event.target.value);
+                            veiculo["placa"] = event.target.value;
+                        }}
+                    />
+                </Div>
+                <Div>
+                    <Label>Cor</Label>
+                    <Input
+                        type="text"
+                        placeholder="Informe a cor do veículo"
+                        onChange={(event) => {
+                            setCor(event.target.value);
+                            veiculo["cor"] = event.target.value;
+                        }}
+                    />
+                </Div>
 
-                            <Column>
-                                <Label>Ano</Label>
-                                <Select
-                                    required
-                                    value={ano}
-                                    onChange={(event) => {
-                                        setAno(event.target.value);
-                                        setAnoTexto(handleTextChange(event));
-                                    }}
-                                >
-                                    <option value="">Selecione o ano...</option>
-                                    {carregandoAnos ? (
-                                        <option>Carregando...</option>
-                                    ) : todosOsAnos.length > 0 ? (
-                                        todosOsAnos.map((ano) => (
-                                            <option
-                                                key={ano.Value}
-                                                value={ano.Value}
-                                            >
-                                                {ano.Label.toUpperCase()}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option>Nenhum ano disponível</option>
-                                    )}
-                                </Select>
-                            </Column>
-                        </Row>
+                <Div>
+                    <Label>Proprietário</Label>
+                    <Input
+                        type="text"
+                        placeholder="Informe o proprietário(a) do veículo"
+                        onChange={(event) => {
+                            setProprietario(event.target.value);
+                            veiculo["proprietario"] = event.target.value;
+                        }}
+                    />
+                </Div>
 
-                        <Row>
-                            <Column>
-                                <Label>Placa</Label>
-                                <Input
-                                    required
-                                    type="text"
-                                    placeholder="Informe a placa do veículo"
-                                    onChange={(event) =>
-                                        setPlaca(event.target.value)
-                                    }
-                                />
-                            </Column>
+                <Div>
+                    <Label>Matrícula</Label>
+                    <Input
+                        type="text"
+                        placeholder="Informe a matrícula do proprietário(a)"
+                        onChange={(event) => {
+                            setMatricula(event.target.value);
+                            veiculo["matricula"] = event.target.value;
+                        }}
+                    />
+                </Div>
 
-                            <Column>
-                                <Label>Cor</Label>
-                                <Input
-                                    required
-                                    type="text"
-                                    placeholder="Informe a cor do veículo"
-                                    onChange={(event) =>
-                                        setCor(event.target.value)
-                                    }
-                                />
-                            </Column>
-                        </Row>
+                <Div>
+                    <Label>Status</Label>
+                    <select
+                        value={status}
+                        onChange={(event) => {
+                            function paraBooleano(str) {
+                                return str === "true";
+                            }
 
-                        <Row>
-                            <Column>
-                                <Label>Proprietário</Label>
-                                <Input
-                                    required
-                                    type="text"
-                                    placeholder="Informe o proprietário(a) do veículo"
-                                    onChange={(event) =>
-                                        setProprietario(event.target.value)
-                                    }
-                                />
-                            </Column>
+                            setStatus(event.target.value);
+                            veiculo["status"] = paraBooleano(event.target.value)
+                                ? "Permitido"
+                                : "Proibido";
+                        }}
+                    >
+                        <option>Selecione...</option>
+                        <option value={"true"}>Permitido</option>
+                        <option value={"false"}>Proibido</option>
+                    </select>
+                </Div>
 
-                            <Column>
-                                <Label>Matrícula</Label>
-                                <Input
-                                    required
-                                    type="text"
-                                    placeholder="Informe a matrícula do proprietário(a)"
-                                    onChange={(event) =>
-                                        setMatricula(event.target.value)
-                                    }
-                                />
-                            </Column>
-                        </Row>
+                {/* Confirma os dados no modal com o botão de enviar */}
+                <BotaoEnviar type="submit" onClick={() => setIsOpen(!isOpen)}>
+                    Enviar
+                </BotaoEnviar>
 
-                        <Row>
-                            <Column>
-                                <Label>Status</Label>
-                                <Select
-                                    required
-                                    value={status}
-                                    onChange={(event) =>
-                                        setStatus(event.target.value)
-                                    }
-                                >
-                                    <option value="Permitido">Permitido</option>
-                                    <option value="Proibido">Proibido</option>
-                                </Select>
-                            </Column>
-                        </Row>
-
-                        <Div>
-                            <BotaoEnviar
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    setIsOpen(!isOpen);
-                                }}
-                            >
-                                Enviar
-                            </BotaoEnviar>
-                        </Div>
-                    </Form>
-                    {isOpen && (
-                        <ModalBackground>
-                            <Modal>
-                                <ModalSair onClick={handleCancel}>X</ModalSair>
-                                <h2>Confirmar Dados</h2>
-                                <Div>
-                                    <strong>Tipo:</strong>
-                                    {objeto.tipo}
-                                </Div>
-                                <Div>
-                                    <strong>Marca: </strong>
-                                    {objeto.marca}
-                                </Div>
-                                <Div>
-                                    <strong>Modelo: </strong>
-                                    {objeto.modelo}
-                                </Div>
-                                <Div>
-                                    <strong>Ano: </strong>
-                                    {objeto.ano}
-                                </Div>
-                                <Div>
-                                    <strong>Placa: </strong>
-                                    {objeto.placa}
-                                </Div>
-                                <Div>
-                                    <strong>Cor: </strong>
-                                    {objeto.cor}
-                                </Div>
-                                <Div>
-                                    <strong>Proprietário: </strong>
-                                    {objeto.proprietario}
-                                </Div>
-                                <Div>
-                                    <strong>Matricula: </strong>
-                                    {objeto.matricula}
-                                </Div>
-                                <Div>
-                                    <strong>Status: </strong>
-                                    {objeto.status}
-                                </Div>
-
-                                <ModalSendButton
-                                    onClick={() => handleSubmit(objeto)}
+                {isOpen && (
+                    <ModalBackground>
+                        <Modal>
+                            <ModalSair onClick={handleCancel}>X</ModalSair>
+                            <h2>Confirmar Dados</h2>
+                            <Div>
+                                <strong>Tipo: </strong>
+                                {veiculo.tipo}
+                            </Div>
+                            <Div>
+                                <strong>Marca: </strong>
+                                {veiculo.marca}
+                            </Div>
+                            <Div>
+                                <strong>Modelo: </strong>
+                                {veiculo.modelo}
+                            </Div>
+                            <Div>
+                                <strong>Ano: </strong>
+                                {veiculo.ano}
+                            </Div>
+                            <Div>
+                                <strong>Placa: </strong>
+                                {veiculo.placa}
+                            </Div>
+                            <Div>
+                                <strong>Cor: </strong>
+                                {veiculo.cor}
+                            </Div>
+                            <Div>
+                                <strong>Proprietário: </strong>
+                                {veiculo.proprietario}
+                            </Div>
+                            <Div>
+                                <strong>Matricula: </strong>
+                                {veiculo.matricula}
+                            </Div>
+                            <Div>
+                                <strong>Status: </strong>
+                                {veiculo.status}
+                            </Div>
+                            <Div>
+                                <BotaoEnviar
+                                    onClick={() => handleSubmit(veiculo)}
                                 >
                                     Confirmar
-                                </ModalSendButton>
-                                <ModalCancelButton onClick={handleCancel}>
+                                </BotaoEnviar>
+                                <BotaoCancelar onClick={handleCancel}>
                                     Cancelar
-                                </ModalCancelButton>
-                            </Modal>
-                        </ModalBackground>
-                    )}
-                </Container>
-                <Footer />
-            </Wrapper>
+                                </BotaoCancelar>
+                            </Div>
+                        </Modal>
+                    </ModalBackground>
+                )}
+            </form>
+            <ToastContainer autoClose={3000} position="bottom-left" />
         </>
     );
 };

@@ -6,6 +6,8 @@ export const theme = {
         cinzaClaro: "#494948",
         cinzaEscuro: "#262626",
         verdeClaro: "#2F9A48",
+        verdeEscuro: "#216932",
+        vermelhoClaro: "#bd3131",
+        vermelhoEscuro: "#692121",
     },
-
 };

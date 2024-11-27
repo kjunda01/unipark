@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
-    font-family: "Helvetica";
+    font-family: Helvetica, Arial;
     box-sizing: border-box;
   }
 `;
