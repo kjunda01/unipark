@@ -14,6 +14,7 @@ import Header from "../components/layout/Header";
 import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
 import StyledButton from "../components/Button/StyledButton";
+import StyledSelect from "../components/Select/StyledSelect";
 
 const Div = styled.div`
     margin-bottom: 1rem;
@@ -49,25 +50,6 @@ const StyledInput = styled(Input)`
     }
 `;
 
-const StyledSelect = styled.select`
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    background-color: #fff;
-    transition: border-color 0.3s ease;
-
-    &:focus {
-        border-color: #007bff;
-        outline: none;
-    }
-
-    &:disabled {
-        background-color: #f1f1f1;
-        cursor: not-allowed;
-    }
-`;
 
 const PaginaNovoVeiculo = () => {
     const [tipo, setTipo] = useState("");
