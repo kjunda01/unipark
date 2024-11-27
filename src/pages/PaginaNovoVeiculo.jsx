@@ -1,27 +1,35 @@
+// 1. Bibliotecas externas
 import { useEffect, useState } from "react";
-import ApiFIPE from "../service/ApiFIPE";
-import styled from "styled-components";
-import { Modal, ModalBackground, ModalSair } from "../components/Modal";
-import Input from "../components/form/Input";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Label from "../components/Label/Label";
-
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "../components/layout/Footer";
+import styled from "styled-components";
+
+// 2. Componentes gerais
 import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import { Modal, ModalBackground, ModalSair } from "../components/Modal";
+import Input from "../components/form/Input";
+import Label from "../components/Label/Label";
+
+// 3. Componentes estilizados
 import { Wrapper } from "../components/layout/Wrapper.style";
 import { Container } from "../components/layout/Container.style";
 import StyledButton from "../components/Button/StyledButton";
 import StyledSelect from "../components/Select/StyledSelect";
 
+// 4. Serviços/APIs
+import ApiFIPE from "../service/ApiFIPE";
+import { MOCKAPI } from "../service/ApiMockApi";
+
 const Div = styled.div`
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
 `;
 
 const FormContainer = styled.div`
-    max-width: 600px;
+    min-width: 50vw;
     margin: 2rem auto;
     padding: 2rem;
     background-color: #f9f9f9;
@@ -35,7 +43,6 @@ const StyledForm = styled.form`
     gap: 1.5rem;
 `;
 
-// Estilos para os campos de entrada
 const StyledInput = styled(Input)`
     width: 100%;
     padding: 0.75rem;
@@ -45,11 +52,10 @@ const StyledInput = styled(Input)`
     transition: border-color 0.3s ease;
 
     &:focus {
-        border-color: #007bff;
+        border-color: ${({ theme }) => theme.colors.azulEscuro};
         outline: none;
     }
 `;
-
 
 const PaginaNovoVeiculo = () => {
     const [tipo, setTipo] = useState("");
@@ -177,10 +183,7 @@ const PaginaNovoVeiculo = () => {
             veiculo.status
         ) {
             try {
-                const response = await axios.post(
-                    "https://6727abed270bd0b9755344ee.mockapi.io/api/veiculos",
-                    veiculo
-                );
+                const response = MOCKAPI.postVeiculo(veiculo);
 
                 if (response.status !== 404) {
                     toast.success(
@@ -302,7 +305,7 @@ const PaginaNovoVeiculo = () => {
                                     <option>Indisponível</option>
                                 )}
                             </StyledSelect>
-                            <Div>
+                            <div>
                                 <Label>Placa</Label>
                                 <StyledInput
                                     type="text"
@@ -312,8 +315,8 @@ const PaginaNovoVeiculo = () => {
                                         veiculo["placa"] = event.target.value;
                                     }}
                                 />
-                            </Div>
-                            <Div>
+                            </div>
+                            <div>
                                 <Label>Cor</Label>
                                 <StyledInput
                                     type="text"
@@ -323,9 +326,9 @@ const PaginaNovoVeiculo = () => {
                                         veiculo["cor"] = event.target.value;
                                     }}
                                 />
-                            </Div>
+                            </div>
 
-                            <Div>
+                            <div>
                                 <Label>Proprietário</Label>
                                 <StyledInput
                                     type="text"
@@ -336,9 +339,9 @@ const PaginaNovoVeiculo = () => {
                                             event.target.value;
                                     }}
                                 />
-                            </Div>
+                            </div>
 
-                            <Div>
+                            <div>
                                 <Label>Matrícula</Label>
                                 <StyledInput
                                     type="text"
@@ -349,11 +352,11 @@ const PaginaNovoVeiculo = () => {
                                             event.target.value;
                                     }}
                                 />
-                            </Div>
+                            </div>
 
-                            <Div>
+                            <div>
                                 <Label>Status</Label>
-                                <select
+                                <StyledSelect
                                     value={status}
                                     onChange={(event) => {
                                         function paraBooleano(str) {
@@ -372,8 +375,8 @@ const PaginaNovoVeiculo = () => {
                                     <option value={""}>Selecione...</option>
                                     <option value={"true"}>Permitido</option>
                                     <option value={"false"}>Proibido</option>
-                                </select>
-                            </Div>
+                                </StyledSelect>
+                            </div>
 
                             {/* Confirma os dados no modal com o botão de enviar */}
                             <StyledButton
@@ -435,7 +438,7 @@ const PaginaNovoVeiculo = () => {
                                                 Confirmar
                                             </StyledButton>
                                             <StyledButton
-                                                backgroundColor={"cancel"}
+                                                backgroundcolor={"cancel"}
                                                 onClick={handleCancel}
                                             >
                                                 Cancelar

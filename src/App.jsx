@@ -17,13 +17,8 @@ function App() {
                     <Route>
                         <Route path="/" element={<PaginaInicial />} />
                         <Route path="/aovivo" element={<PaginaAoVivo />} />
-                        <Route
-                            path="/buscarveiculo"
-                            element={<PaginaConsulta />}
-                        />
-                        <Route
-                            path="/cadastrarveiculo"
-                            element={<PaginaNovoVeiculo />}
+                        <Route path="/buscarveiculo" element={<PaginaConsulta />}/>
+                        <Route path="/cadastrarveiculo" element={<PaginaNovoVeiculo />}
                         />
                     </Route>
                 </Routes>

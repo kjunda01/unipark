@@ -125,7 +125,7 @@ export const Modal = styled.div`
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 60vw;
+    min-width: 30vw;
     text-align: left;
     
     h2{
