@@ -20,7 +20,7 @@ import StyledSelect from "../components/Select/StyledSelect";
 
 // 4. Serviços/APIs
 import ApiFIPE from "../service/ApiFIPE";
-import { MOCKAPI } from "../service/ApiMockApi";
+import MOCKAPI from "../service/ApiMockApi";
 
 const Div = styled.div`
     margin-bottom: 1rem;
