@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaTimes } from "react-icons/fa";
+import { FaTimesCircle } from "react-icons/fa";
 import MOCKAPI from "../service/ApiMockApi"; // A API mockada
 
 const ModalWrapper = styled.div`
@@ -144,7 +144,7 @@ const ModalEdit = ({ isOpen, onRequestClose, veiculoId, onUpdate }) => {
         <ModalWrapper>
             <ModalContent>
                 <CloseButton onClick={onRequestClose}>
-                    <FaTimes />
+                    <FaTimesCircle />
                 </CloseButton>
                 <h2>Editar Veículo</h2>
                 <form onSubmit={handleSubmit}>
