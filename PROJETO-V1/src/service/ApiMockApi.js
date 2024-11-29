@@ -58,6 +58,19 @@ const MOCKAPI = {
             return response.data;
         } catch (error) {
             console.error(error);
+            throw error;
+        }
+    },
+
+    async getVeiculoPorPlaca(placa) {
+        try {
+            const response = await axios.get(
+                `${URL_MOCKAPI_VEICULOS}?placa=${encodeURIComponent(placa)}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao buscar veículo pela placa:", error);
+            throw error;
         }
     },
 
@@ -101,7 +114,6 @@ const MOCKAPI = {
                 `${URL_MOCKAPI_ULTIMO_VEICULO}/${id}`,
                 objeto
             );
-
             return response.data;
         } catch (error) {
             console.error("Erro ao atualizar veículo:", error);
@@ -118,6 +130,7 @@ const MOCKAPI = {
             return response.data;
         } catch (error) {
             console.error(error);
+            throw error;
         }
     },
 };

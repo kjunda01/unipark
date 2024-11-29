@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import MOCKAPI from "../service/ApiMockApi"; // A API mockada
 import SearchBar from "../components/SearchBar";
 import Table from "../components/Table";
@@ -11,7 +11,7 @@ const PaginaConsultar = () => {
     const [veiculos, setVeiculos] = useState([]);
     const [termoBuscado, setTermoBuscado] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(30);
+    const [itemsPerPage] = useState(100);
     const [isOpen, setIsOpen] = useState(false);
     const [veiculoAtual, setVeiculoAtual] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false); // Controle para o modal de confirmação
