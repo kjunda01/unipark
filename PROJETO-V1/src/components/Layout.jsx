@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 
 const Content = styled.div`
     width: 98%;
-    max-width: 1200px;
+    max-width: 80%;
     margin: 0 auto; // Centraliza a box
     padding: 20px;
     background-color: white;
